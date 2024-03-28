@@ -1,8 +1,8 @@
 import express from "express";
-import {deleteProductDetails, getProductDetails, getProducts, newProduct, updateProductDetails} from "../controllers/productController.js";
+import {deleteProductDetails, getProductDetails, getProducts, newProduct, updateProductDetails} from "../controllers/productControllers.js";
 const router = express.Router();
 
-// sets up a route for /products that listens for GET requests.
+// sets up a route or /products that listens for GET requests.
 router.route("/products").get(getProducts); 
 
 // sets up a route for /admin/products that listens for POST requests.

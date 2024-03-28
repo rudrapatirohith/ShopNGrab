@@ -23,8 +23,13 @@ app.use(express.json());
 //importing all routes
 import productRoutes from "./routes/products.js"
 
+import authRoutes from "./routes/auth.js"
+
 // if someone visits my server at /api/shopvibe/products, they'll be handled by the productRoutes.
 app.use("/api/shopngrab",productRoutes);
+
+app.use("/api/shopngrab",authRoutes);
+
 
 //using error middleware
 app.use(errorMiddleware);

@@ -1,6 +1,5 @@
 // This is a placeholder for where you'd normally interact with a database to retrieve and send back actual product data.
 import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
-import product from "../models/product.js";
 import Product from "../models/product.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
