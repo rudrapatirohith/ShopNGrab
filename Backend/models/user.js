@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const UserSchema = new mongoose.Schema(
     {
@@ -29,7 +30,7 @@ const UserSchema = new mongoose.Schema(
             default: "user"
         },
         resetPasswordToken: String,
-        resetPasswordExpire: String,
+        resetPasswordExpire: Date,
     },
     {timestamps:true}  // shows at what its created
 );
@@ -53,6 +54,20 @@ UserSchema.methods.getJwtToken= function(){
 //compares passwords
 UserSchema.methods.comparePassword= async function(passwordEntered){      // to use this.password im not using arrow function
     return await bcrypt.compare(passwordEntered,this.password);
+}
+
+// Generate password reset token
+UserSchema.methods.getResetPasswordToken= async function(){
+
+    // Generating Token
+    const resetToken = crypto.randomBytes(15).toString("hex")
+
+    // Hashiing it and setting it to resetPassword feild
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");  // encyrpting that  token to store in db
+
+    this.resetPasswordExpire = Date.now() + 30*60*1000;  // giving 30 mins time 
+
+    return resetToken;
 }
 
 export default mongoose.model("User",UserSchema); // creates new model with name user and stores in it in db

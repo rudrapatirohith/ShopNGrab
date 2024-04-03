@@ -23,11 +23,14 @@ export const getProducts= catchAsyncErrors(async (req,res)=>{
     products = await apiFilters.query.clone(); 
 
     res.status(200).json({resPerPage,filterProductsCount,products,})
+
 }
 );
 
 // Creating /adding new Product  POST => /api/shopngrab/admin/products
 export const newProduct=catchAsyncErrors( async (req,res)=>{
+
+    req.body.user = req.user._id; // sets user id in user place in prod creation
    const product = await Product.create(req.body)  // creates and saves data in db
     res.status(200).json({product,})
 }

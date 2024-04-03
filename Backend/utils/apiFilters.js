@@ -40,7 +40,7 @@ class APIFilters{
 
         const currentPage = Number(this.queryStr.page) || 1; //checks for the page number from the req and if there is nmbr it will take that or else itll take as 1 and shows first page
         const skip = resPerPage * (currentPage-1); // if i gave page 2 now itll work like (4*(2-1)=>4) so from page 5-8 will be shown
-console.log(this.queryStr);
+// console.log(this.queryStr);
         this.query = this.query.limit(resPerPage).skip(skip); //skip will skip over calculated no of docs and limit used to give limited no of docs as per our specified nmbrof results per page ex: we gave 4 
         return this
     }
