@@ -68,6 +68,7 @@ UserSchema.methods.getResetPasswordToken= async function(){
     this.resetPasswordExpire = Date.now() + 30*60*1000;  // giving 30 mins time 
 
     return resetToken;
+
 }
 
 export default mongoose.model("User",UserSchema); // creates new model with name user and stores in it in db

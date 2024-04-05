@@ -27,6 +27,9 @@ export const getProducts= catchAsyncErrors(async (req,res)=>{
 }
 );
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Creating /adding new Product  POST => /api/shopngrab/admin/products
 export const newProduct=catchAsyncErrors( async (req,res)=>{
 
@@ -35,6 +38,10 @@ export const newProduct=catchAsyncErrors( async (req,res)=>{
     res.status(200).json({product,})
 }
 );
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 // Get Products details based on id  GET=> /api/shopngrab/admin/products/:id
 export const getProductDetails = catchAsyncErrors(async(req,res,next)=>{
@@ -46,6 +53,10 @@ export const getProductDetails = catchAsyncErrors(async(req,res,next)=>{
     res.status(200).json({product})
 }
 );
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 // Update  Product   PUT => /api/shopngrab/admin/products/:id
 export const updateProductDetails = catchAsyncErrors(async(req,res)=>{
@@ -59,6 +70,9 @@ export const updateProductDetails = catchAsyncErrors(async(req,res)=>{
 }
 );
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 // Delete product    DELETE => //api/shopngrab/admin/products/:id
 export const deleteProductDetails = catchAsyncErrors(async(req,res)=>{
     let product = await Product.findById(req?.params?.id)
@@ -69,3 +83,79 @@ export const deleteProductDetails = catchAsyncErrors(async(req,res)=>{
     res.status(200).json({message:'Product Deleted'})
 }
 );
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Create / Update product review => /api/shopngrab/reviews
+export const createProductReview = catchAsyncErrors(async(req,res,next)=>{
+    const { rating,comment,productId} = req.body;
+    const review = {
+        user: req?.user?._id,
+        rating:Number(rating),
+        comment,
+    }
+
+    const product = await Product.findById(productId);
+    if(!product){
+        return next(new ErrorHandler("Product not Found",404));
+    }
+    const isReviewed = product?.reviews.find(
+        (rev)=>rev.user.toString()===req?.user?._id.toString()
+    )
+
+    if(isReviewed){  
+        product.reviews.forEach((review)=>{ // its a for loop to check every value like user,comment,rating in reviews
+            if(review?.user?.toString()===req?.user?._id.toString()){ //if user who posted the review is matched with id of the user it will just update
+                review.comment=comment,
+                review.rating=rating;
+            }
+        })
+    }
+    else{
+        product.reviews.push(review);  // if not itll will push the data to that array
+        product.numOfReviews=product.reviews.length;
+    }
+     // reduce is used to work on accumulate which adds all reviews starting with 0 value and divide it with no of reviews to get avg 
+    product.ratings= product.reviews.reduce((acc,item)=>item.rating+acc,0)/product.reviews.length;
+
+    await product.save({validateBeforeSave:false});  // to ignore validations
+    res.status(200).json({success: true})
+})
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Get Product Reviews => /api/shopngrab/reviews/:id
+export const getProductReviews = catchAsyncErrors(async(req,res,next)=>{
+    const product = await Product.findById(req.query.id);
+    if(!product){
+        return next(new ErrorHandler("Product not Found",404));
+    }
+   res.status(200).json({reviews: product.reviews,})
+});
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Delete Product Review => api/shopngrab/reviews
+export const deleteReview = catchAsyncErrors(async(req,res,next)=>{
+    let product = await Product.findById(req.query.productId);  // we give product id in params
+    if(!product){
+        return next(new ErrorHandler("Product not Found",404));
+    }
+
+    // checks for the reviewws and if review id matches with the review id given in params it will be ignored
+    const reviews = product?.reviews?.filter(
+        (review)=> review._id.toString()!==req?.query?.id.toString()
+    )
+
+    const numOfReviews = reviews.length;// updates the nop of reviews
+
+    // if no of reviews is 0 then ratings will be 0 if not it will calculate all review.rating and divide by total reviews
+    const ratings = 
+    numOfReviews === 0           
+    ? 0
+    : product.reviews.reduce((acc,item)=> item.rating+acc,0)/numOfReviews;
+
+    product = await Product.findByIdAndUpdate(req.query.productId,{reviews,numOfReviews,ratings},{new:true}) // find and update the product by id by assiging above values
+
+    res.status(200).json({success:true,product})
+})

@@ -19,6 +19,26 @@ export default (err, req, res, next)=> {
         error = new ErrorHandler(message,400);
     }
 
+    // Handle Mongoose Duplicate Key Error- if we same email exists
+    if(err.code===11000){
+        const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+        error = new ErrorHandler(message,400);
+    }
+
+    // Handle Invalid JWT error - if jwt verify fails to match tokens in middleware/auth.js in userAuthenticated we set this error
+    if(err.name==='JsonWebTokenError'){
+        const message = `JSON Web Token is invalid. Try Again!`;
+        error = new ErrorHandler(message,400);
+    }
+
+    // Handle expired JWT Error - if cookie token expires 
+    if(err.name==='TokenExpiredError'){
+        const message=`JSON Web Token is expired. Try again!`;
+        error = new ErrorHandler(message,400);
+    }
+    
+    
+
     if(process.env.NODE_ENV==='DEVELOPMENT'){ // in dev we show error and stack additionally
         res.status(error.statusCode).json({
             message:error.message,

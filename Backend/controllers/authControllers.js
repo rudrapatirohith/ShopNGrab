@@ -4,6 +4,8 @@ import ErrorHandler from "../utils/errorHandler.js";
 import sendToken from "../utils/sendToken.js";
 import { getPasswordTemplate } from "../utils/emailTemplates.js";
 import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
+import { nextTick } from "process";
 
 // Signin user => /api/shopngrab/sigin
 export const Signin = catchAsyncErrors(async(req,res,next)=>{
@@ -19,7 +21,7 @@ export const Signin = catchAsyncErrors(async(req,res,next)=>{
 sendToken(user,201,res) // calls sendToken.js and gives response and create cookie
 });
 
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 // Login User => /api/shopngrab/login
@@ -46,7 +48,7 @@ export const login = catchAsyncErrors(async(req,res,next)=>{
     sendToken(user,200,res) // calls sendToken.js and gives response and create cookie
 })
 
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 // Logout User => /api/shopngrab/logout
@@ -58,7 +60,7 @@ export const logout = catchAsyncErrors(async(req,res,next)=>{
 })
 
 
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Forgot Password => /api/shopngrab/forgot/password
 export const forgotPassword = catchAsyncErrors(async(req,res,next)=>{
@@ -71,7 +73,7 @@ export const forgotPassword = catchAsyncErrors(async(req,res,next)=>{
     }
 
     //Get Token to Reset Password
-    const resetToken =  user.getResetPasswordToken() 
+    const resetToken =  await user.getResetPasswordToken() 
 
     await user.save() // saves both the values resetpasstoken and resetpasssexpire in db
 
@@ -98,3 +100,119 @@ export const forgotPassword = catchAsyncErrors(async(req,res,next)=>{
     // sendToken(user,200,res) // calls sendToken.js and gives response and create cookie
 })
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Reset Password => /api/shopngrab/password/reset:token
+export const resetPassword = catchAsyncErrors(async(req,res,next)=>{
+
+    // Hash the URL Token
+    const resetPasswordToken=crypto.createHash("sha256").update(req.params.token).digest("hex");
+
+    const user = await User.findOne({
+        resetPasswordToken, //checks whether this is there in db
+        resetPasswordExpire: {$gt:Date.now()} // if this is greatweer than current time token wont expire
+    })
+
+    if(!user){
+        return next(new ErrorHandler("Password reset Token is Invalid or has been Expired",400))
+    }
+
+    if(req.body.password!==req.body.confirmpassword){
+        return next(new ErrorHandler("Passwords doesn't Match",400))
+    }
+
+    //if yes , setting the new password
+    user.password=req.body.password
+
+    user.resetPasswordExpire=undefined;
+    user.resetPasswordToken=undefined;
+
+    await user.save(); // this will call pre function and if pass is modified it iwll automically hash
+
+    sendToken(user,200,res);
+})
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Get current user profile => /api/shopngrab/profile
+export const getUserProfile=catchAsyncErrors(async(req,res,next)=>{
+    const user=await User.findById(req?.user?._id);
+
+    res.status(200).json({user})
+})
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//update Password => /api/shopngrab/password/update
+export const updatePassword=catchAsyncErrors(async(req,res,next)=>{
+    const user=await User.findById(req?.user?._id).select("+password"); //as we kept select as false for password to show in db we use tbis select (+password) to get the password
+
+    // checking the previous user password
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+    if(!isPasswordMatched){
+        return next(new ErrorHandler("Old Password is incorrect", 400));
+    }
+
+    user.password=req.body.password;
+    user.save();
+
+    res.status(200).json({success: true})
+})
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//update user profile => /api/shopngrab/profile/update
+export const updateProfile = catchAsyncErrors(async(req,res,next)=>{
+    const newUserData = { 
+        name : req.body.name,
+        email : req.body.email, 
+    };
+    const user=await User.findByIdAndUpdate(req.user._id,newUserData,{new:true}) // checks user id and updates email and name if its changed itll update as new is set to true
+    res.status(200).json({user})
+})
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//get all users => /api/shopngrab/admin/users
+export const getAllUsers = catchAsyncErrors(async(req,res,next)=>{
+    const user = await User.find();
+    res.status(200).json({user})
+})
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//get user details => /api/shopngrab/admin/users/:id
+export const getUserDetails = catchAsyncErrors(async(req,res,next)=>{
+    const user= await User.findById(req.params.id);
+    if(!user){
+        return next(new ErrorHandler(`User not found with id: ${req.params.id}`,404));
+        }
+    res.status(200).json({user})
+})
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//update user => /api/shopngrab/admin/users/update/:id
+export const updateUser= catchAsyncErrors(async(req,res,next)=>{
+    const newUserDetails = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role,
+    }
+    const user = await User.findByIdAndUpdate(req.params.id,newUserDetails,{new:true})
+    res.status(200).json({user})
+})
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//delete user => /api/shopngrab/admin/users/delete/:id
+export const deleteUser = catchAsyncErrors(async(req,res,next)=>{
+    let user= await User.findById(req?.params?.id)
+    if(!user){
+        return next(new ErrorHandler("User not found",404))
+    }
+    user = await User.findByIdAndDelete(req?.params?.id)
+    res.status(200).json({message:"User Deleted Successfully"})
+
+})
