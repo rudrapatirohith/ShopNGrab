@@ -6,7 +6,7 @@ import APIFilters from "../utils/apiFilters.js";
 
 
 // gets all Product details GET => /api/shopngrab/products
-export const getProducts= catchAsyncErrors(async (req,res)=>{
+export const getProducts= catchAsyncErrors(async (req,res,next)=>{
 
     const resPerPage=4;
     //creates a new instance of APIFilters by passing the product model and the request query string (req.query) to the constructor.
