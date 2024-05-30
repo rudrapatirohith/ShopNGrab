@@ -10,6 +10,7 @@ import ProductDetails from "./components/product/ProductDetails";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import Profile from "./components/user/Profile";
+import UpdateProfile from "./components/user/UpdateProfile";
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/me/profile" element={<Profile />} />
-  
+        <Route path="/me/update_profile" element={<UpdateProfile />} />
+   
        
         </Routes>
       </div>
