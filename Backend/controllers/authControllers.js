@@ -6,7 +6,7 @@ import { getPasswordTemplate } from "../utils/emailTemplates.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
 import { nextTick } from "process";
-import { upload_file } from "../utils/cloudinary.js";
+import { delete_file, upload_file } from "../utils/cloudinary.js";
 
 // Signin user => /api/shopngrab/sigin
 export const Signin = catchAsyncErrors(async(req,res,next)=>{
@@ -69,6 +69,11 @@ export const uploadAvatar = catchAsyncErrors(async(req,res,next)=>{
 
     
     const avatarResponse = await upload_file(req.body.avatar,"shopNgrab/avatars");
+
+    //Remove previous avatar
+    if(req?.user?.avatar?.url){
+        await delete_file(req?.user?.avatar?.public_id);
+    }
     const uploadedAvatar=await User.findByIdAndUpdate(req?.user?._id,{avatar:avatarResponse});
       res.status(200).json({
         message:"uploaded",
