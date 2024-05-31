@@ -6,6 +6,7 @@ import { getPasswordTemplate } from "../utils/emailTemplates.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
 import { nextTick } from "process";
+import { upload_file } from "../utils/cloudinary.js";
 
 // Signin user => /api/shopngrab/sigin
 export const Signin = catchAsyncErrors(async(req,res,next)=>{
@@ -39,6 +40,7 @@ export const login = catchAsyncErrors(async(req,res,next)=>{
         return next(new ErrorHandler("Invalid Email or Password",401))
     }
 
+
     //checks if password is correct
     const isPasswordMatched = await user.comparePassword(password) //calls that bcrypt.comapre and compare this with hashed pass
     if(!isPasswordMatched){
@@ -59,6 +61,50 @@ export const logout = catchAsyncErrors(async(req,res,next)=>{
     })
 })
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+// Upload User Avatar=> /api/shopngrab/me/upload_avatar
+export const uploadAvatar = catchAsyncErrors(async(req,res,next)=>{
+
+    
+    const avatarResponse = await upload_file(req.body.avatar,"shopNgrab/avatars");
+    const uploadedAvatar=await User.findByIdAndUpdate(req?.user?._id,{avatar:avatarResponse});
+      res.status(200).json({
+        message:"uploaded",
+    })
+})
+// export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
+//     try {
+//         // Log the incoming request body to debug
+//         console.log("Request Body:", req.body);
+
+//         if (!req.body.avatar) {
+//             return res.status(400).json({ message: "Avatar file is required" });
+//         }
+
+//         const avatarResponse = await upload_file(req.body.avatar, "shopNgrab/avatars");
+        
+//         // Log the avatar response to debug
+//         console.log("Avatar Response:", avatarResponse);
+
+//         const user = await User.findByIdAndUpdate(
+//             req.user._id,
+//             { avatar: avatarResponse },
+//             { new: true, runValidators: true }
+//         );
+
+//         // Log the updated user to debug
+//         console.log("Updated User:", user);
+
+//         res.status(200).json({
+//             user,
+//         });
+//     } catch (error) {
+//         console.error("Upload Avatar Error:", error); // Log the error
+//         res.status(500).json({ message: error.message });
+//     }
+// });
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

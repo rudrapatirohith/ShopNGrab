@@ -23,6 +23,7 @@ export const userApi = createApi({
             },
             providesTags: ["User"],
         }),
+        
         updateProfile: builder.mutation({
             query(body){
                 return {
@@ -33,9 +34,19 @@ export const userApi = createApi({
             },
             invalidatesTags: ["User"],
         }),
+        uploadAvatar: builder.mutation({
+            query(body){
+                return{
+                    url:"/profile/upload_avatar",
+                    method:"PUT",
+                    body,
+                };
+            },
+            invalidatesTags: ["User"],
+        })
         
     })
 })
 
 
-export const {useGetMeQuery,useUpdateProfileMutation} = userApi;  
+export const {useGetMeQuery,useUpdateProfileMutation,useUploadAvatarMutation} = userApi;  

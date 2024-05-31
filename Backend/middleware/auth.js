@@ -13,6 +13,7 @@ export const userAuthenticated = catchAsyncErrors(async (req,res,next)=>{
         return next(new ErrorHandler('Login to access this',401))
     }
 
+
     const decoder = jwt.verify(token,process.env.JWT_SECRET);
     req.user = await User.findById(decoder.id); // finds user with the user with the id fetched from token and matches the user and stores user data in req.body
     next();
