@@ -79,77 +79,61 @@ export const uploadAvatar = catchAsyncErrors(async(req,res,next)=>{
         message:"uploaded",
     })
 })
-// export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
-//     try {
-//         // Log the incoming request body to debug
-//         console.log("Request Body:", req.body);
 
-//         if (!req.body.avatar) {
-//             return res.status(400).json({ message: "Avatar file is required" });
-//         }
-
-//         const avatarResponse = await upload_file(req.body.avatar, "shopNgrab/avatars");
-        
-//         // Log the avatar response to debug
-//         console.log("Avatar Response:", avatarResponse);
-
-//         const user = await User.findByIdAndUpdate(
-//             req.user._id,
-//             { avatar: avatarResponse },
-//             { new: true, runValidators: true }
-//         );
-
-//         // Log the updated user to debug
-//         console.log("Updated User:", user);
-
-//         res.status(200).json({
-//             user,
-//         });
-//     } catch (error) {
-//         console.error("Upload Avatar Error:", error); // Log the error
-//         res.status(500).json({ message: error.message });
-//     }
-// });
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Forgot Password => /api/shopngrab/forgot/password
-export const forgotPassword = catchAsyncErrors(async(req,res,next)=>{
-   
-    // find email in the database with entered email
-    const user = await User.findOne({email:req.body.email}) 
-
-    if(!user){ // if we dont find email matched we get error
-        return next(new ErrorHandler("We havent found any user with this email",404))
-    }
-
-    //Get Token to Reset Password
-    const resetToken =  await user.getResetPasswordToken() 
-
-    await user.save() // saves both the values resetpasstoken and resetpasssexpire in db
-
-    const resetUrl = `${process.env.FRONTEND_URL}/api/shopngrab/password/reset/${resetToken}`;
-
-    const message = getPasswordTemplate(user?.name,resetUrl);
-
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     try {
-        
-        await sendEmail({
-            email: user.email,
-            subject: "ShopNgrab Password Recovery",
-            message,
-        })
-        res.status(200).json({message:`Email has been sent to ${user.email}`})
+        console.log("Received forgot password request for email:", req.body.email);
 
+        // Find email in the database with entered email
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) { // If we don't find email matched, we get an error
+            console.log("User not found with email:", req.body.email);
+            return next(new ErrorHandler("We haven't found any user with this email", 404));
+        }
+
+        // Get Token to Reset Password
+        const resetToken = await user.getResetPasswordToken();
+        console.log("Generated reset token:", resetToken);
+
+        await user.save(); // Saves both the values resetPasswordToken and resetPasswordExpire in DB
+        console.log("User details updated with reset token");
+
+        const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+        console.log("Generated reset URL:", resetUrl);
+
+        const message = getPasswordTemplate(user?.name, resetUrl);
+        console.log("Generated password reset email content");
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: "ShopNgrab Password Recovery",
+                message,
+            });
+            console.log("Password reset email sent to:", user.email);
+
+            res.status(200).json({ message: `Email has been sent to ${user.email}` });
+        } catch (emailError) {
+            console.error("Error sending email:", emailError);
+
+            user.resetPasswordExpire = undefined;
+            user.resetPasswordToken = undefined;
+
+            await user.save();
+            console.log("User reset token cleared after email send failure");
+
+            return next(new ErrorHandler("Failed to send password reset email. Please try again later.", 500));
+        }
     } catch (error) {
-        user.resetPasswordExpire=undefined;
-        user.resetPasswordToken=undefined;
-
-        await user.save();
-        return next(new ErrorHandler(error?.message,500))
+        console.error("Forgot password error:", error);
+        return next(new ErrorHandler("An error occurred while processing the password reset request. Please try again later.", 500));
     }
-    // sendToken(user,200,res) // calls sendToken.js and gives response and create cookie
-})
+});
+
 
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -164,12 +148,12 @@ export const resetPassword = catchAsyncErrors(async(req,res,next)=>{
         resetPasswordToken, //checks whether this is there in db
         resetPasswordExpire: {$gt:Date.now()} // if this is greatweer than current time token wont expire
     })
-
+console.log(user);
     if(!user){
         return next(new ErrorHandler("Password reset Token is Invalid or has been Expired",400))
     }
 
-    if(req.body.password!==req.body.confirmpassword){
+    if(req.body.password!==req.body.confirmPassword){
         return next(new ErrorHandler("Passwords doesn't Match",400))
     }
 

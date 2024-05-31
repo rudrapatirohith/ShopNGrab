@@ -1,6 +1,7 @@
 import {createApi , fetchBaseQuery} from '@reduxjs/toolkit/query/react'  // importing them from Redux Toolkit's RTK Query package for React.
 import { setIsAuthenticated, setIsLoading, setUser } from '../features/userSlice';
 
+
 export const userApi = createApi({ 
     reducerPath: "userApi",     
     baseQuery: fetchBaseQuery({baseUrl:"http://localhost:3000/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
@@ -23,7 +24,7 @@ export const userApi = createApi({
             },
             providesTags: ["User"],
         }),
-        
+
         updateProfile: builder.mutation({
             query(body){
                 return {
@@ -43,10 +44,37 @@ export const userApi = createApi({
                 };
             },
             invalidatesTags: ["User"],
+        }),
+        updatePassword:builder.mutation({
+            query(body){
+                return{
+                    url : "/password/update",
+                    method:"PUT",
+                    body,
+                };
+            }
+        }),
+        forgotPassword: builder.mutation({
+            query(body){
+                return{
+                    url: "/password/forgot",
+                    method: "POST",
+                    body,
+                }
+            }
+        }),
+        resetPassword: builder.mutation({
+            query({token,body}){
+                return{
+                    url:`/password/reset/${token}`,
+                    method:"PUT",
+                    body,
+                }
+            }
         })
         
     })
 })
 
 
-export const {useGetMeQuery,useUpdateProfileMutation,useUploadAvatarMutation} = userApi;  
+export const {useGetMeQuery,useUpdateProfileMutation,useUploadAvatarMutation,useUpdatePasswordMutation,useForgotPasswordMutation,useResetPasswordMutation} = userApi;  
