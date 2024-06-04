@@ -4,14 +4,18 @@ import { useParams } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import Loader from '../layouts/Loader.jsx';
 import toast from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+import { setCartItem } from '../../redux/features/cartSlice.js';
 
 const ProductDetails = () => {
-
+    
+    const [quantity,setQuantity] = useState(1);
+    const[activeImg, setActiveImg] = useState('');
     const params = useParams();
+    const disaptch = useDispatch();
     const { data ,isLoading,error,isError} = useGetProductDetailsQuery(params?.id);
 
 
-    const[activeImg, setActiveImg] = useState('');
 
     useEffect(()=>{
         setActiveImg(
@@ -25,10 +29,38 @@ const ProductDetails = () => {
           toast.error(error?.data?.message);
         }
       },[isError]);
+      
+      const increaseQty = ()=>{
+          const count = document.querySelector(".count");
+          if(count.valueAsNumber>=data?.product?.stock) return;
+          const qty = count.valueAsNumber+1;
+          setQuantity(qty);
+      }
+  
+      const decreaseQty=()=>{
+      const count = document.querySelector(".count");
+      if(count.valueAsNumber<=1)return;
+      const qty = count.valueAsNumber-1;
+      setQuantity(qty);
+      }
+
+      const SetItemToCart = () => {
+        const cartItem = {
+            product:data?.product?._id,
+            name:data?.product?.namr,
+            price:data?.product?.price,
+            image:data?.product?.images[0]?.url,
+            stock:data?.product?.stock,
+            quantity
+        };
+        disaptch(setCartItem(cartItem))
+      };
+
 
     if(isLoading){
        return <Loader />
     }
+
 
     return (
         <>
@@ -83,20 +115,21 @@ const ProductDetails = () => {
 
                     <p id="product_price">$ {data?.product?.price}</p>
                     <div className="stockCounter d-inline">
-                        <span className="btn btn-danger minus">-</span>
+                        <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
                         <input
                             type="number"
                             className="form-control count d-inline"
-                            value="1"
+                            value={quantity}
                             readonly
                         />
-                        <span className="btn btn-primary plus">+</span>
+                        <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
                     </div>
                     <button
                         type="button"
                         id="cart_btn"
                         className="btn btn-primary d-inline ms-4"
-                        disabled=""
+                        disabled={data?.product?.stock<=0}
+                        onClick={SetItemToCart}
                     >
                         Add to Cart
                     </button>

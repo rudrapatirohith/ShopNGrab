@@ -3,10 +3,12 @@ import { productApi } from "./api/productsApi.js"; // Imports the productApi fro
 import { authApi } from "./api/authApi.js";
 import { userApi } from "./api/userApi.js";
 import userReducer from "./features/userSlice.js";
+import cartReducer from "./features/cartSlice.js"
 
 export const store= configureStore({   //Exports the Redux store named store configured with configureStore
     reducer: {
         auth: userReducer,
+        cart: cartReducer,
         [productApi.reducerPath]:productApi.reducer,
         [authApi.reducerPath]:authApi.reducer,
         [userApi.reducerPath]:userApi.reducer,
