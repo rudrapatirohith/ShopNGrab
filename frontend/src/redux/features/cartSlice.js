@@ -20,10 +20,17 @@ export const cartSlice = createSlice({
                 state.cartItems=[...state.cartItems,item]
             }
             localStorage.setItem("cartItems",JSON.stringify(state.cartItems))
+        },
+        removeCartItem:(state,action)=>{
+            state.cartItems= state?.cartItems?.filter(
+                (i)=>i.product !== action.payload // we check if the item if we click it it will be in action payload so it will create new array which doesnt have product id matching to it 
+            )
+            localStorage.setItem("cartItems",JSON.stringify(state.cartItems)) // we send that new array to localstorage now
+
         }
     }
 });
 
 export default cartSlice.reducer ;
 
-export const {setCartItem} = cartSlice.actions;
+export const {setCartItem,removeCartItem} = cartSlice.actions;
