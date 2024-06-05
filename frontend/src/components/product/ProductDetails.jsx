@@ -6,13 +6,14 @@ import Loader from '../layouts/Loader.jsx';
 import toast from "react-hot-toast";
 import { useDispatch } from 'react-redux';
 import { setCartItem } from '../../redux/features/cartSlice.js';
+import PageTitle from '../layouts/PageTitle.jsx';
 
 const ProductDetails = () => {
     
     const [quantity,setQuantity] = useState(1);
     const[activeImg, setActiveImg] = useState('');
     const params = useParams();
-    const disaptch = useDispatch();
+    const dispatch = useDispatch();
     const { data ,isLoading,error,isError} = useGetProductDetailsQuery(params?.id);
 
 
@@ -47,13 +48,14 @@ const ProductDetails = () => {
       const SetItemToCart = () => {
         const cartItem = {
             product:data?.product?._id,
-            name:data?.product?.namr,
+            name:data?.product?.name,
             price:data?.product?.price,
             image:data?.product?.images[0]?.url,
             stock:data?.product?.stock,
             quantity
         };
-        disaptch(setCartItem(cartItem))
+        dispatch(setCartItem(cartItem));
+        toast.success("Item Added to Cart");
       };
 
 
@@ -64,6 +66,7 @@ const ProductDetails = () => {
 
     return (
         <>
+        <PageTitle title={data?.product?.name}/>
             <div className="row d-flex justify-content-around">
                 <div className="col-12 col-lg-5 img-fluid" id="product_image">
                     <div className="p-3">

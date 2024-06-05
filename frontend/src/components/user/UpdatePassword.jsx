@@ -4,6 +4,7 @@ import { useUpdatePasswordMutation } from '../../redux/api/userApi';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+import PageTitle from '../layouts/PageTitle';
 
 const UpdatePassword = () => {
 
@@ -46,7 +47,7 @@ const submitHandler = (e) =>{
   return (
     
     <UserLayout>
-   
+   <PageTitle title={"Update Password"}/>
     <div className="row wrapper ">
       <div className="col-10 col-lg-8">
         <form className="shadow rounded bg-body" onSubmit={submitHandler}>

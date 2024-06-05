@@ -3,6 +3,7 @@ import { useLoginMutation } from '../../redux/api/authApi'
 import toast from 'react-hot-toast'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import PageTitle from '../layouts/PageTitle'
 
 const Login_Signin = () => {
 
@@ -36,6 +37,7 @@ const Login_Signin = () => {
 
   return (
     <>
+    <PageTitle title={"Login"} />
     <div className="row wrapper">
           <div className="col-10 col-lg-5">
               <form

@@ -4,6 +4,7 @@ import { useUpdateProfileMutation } from '../../redux/api/userApi';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import UserLayout from '../layouts/UserLayout';
+import PageTitle from '../layouts/PageTitle';
 
 const UpdateProfile = () => {
 
@@ -47,6 +48,7 @@ const submitHandler = (e) =>{
 
   return (
     <UserLayout>
+      <PageTitle title={"Update Password"}/>
      <div className="row wrapper">
       <div className="col-10 col-lg-8">
         <form

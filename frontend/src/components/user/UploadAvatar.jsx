@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useUploadAvatarMutation } from '../../redux/api/userApi'
 import toast from 'react-hot-toast'
+import PageTitle from '../layouts/PageTitle'
 
 const UploadAvatar = () => {
 
@@ -59,6 +60,7 @@ const UploadAvatar = () => {
     
   return (
     <UserLayout>
+      <PageTitle title={"Upload Avatar"}/>
       <div class="row wrapper">
       <div class="col-10 col-lg-8">
         <form

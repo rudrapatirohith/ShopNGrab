@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useResetPasswordMutation } from '../../redux/api/userApi';
 import toast from 'react-hot-toast';
+import PageTitle from '../layouts/PageTitle'
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
@@ -42,6 +43,7 @@ const ResetPassword = () => {
 
   return (
     <>
+    <PageTitle title={"Reset Password"} />
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
           <form className="shadow rounded bg-body" onSubmit={submitHandler}>

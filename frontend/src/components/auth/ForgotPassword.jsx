@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForgotPasswordMutation } from '../../redux/api/userApi';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import PageTitle from '../layouts/PageTitle';
 
 const ForgotPassword = () => {
     const[email,setEmail] = useState("");
@@ -38,6 +39,7 @@ const submitHandler = (e) =>{
 
   return (
     <>
+    <PageTitle title={"Forgot Password"} />
       <div className="row wrapper">
       <div className="col-10 col-lg-5">
         <form
