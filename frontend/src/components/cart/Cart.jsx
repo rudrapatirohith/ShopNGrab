@@ -23,12 +23,12 @@ const decreaseQty=(item,quantity)=>{
 
 const SetItemToCart = (item,newQty) => {
   const cartItem = {
-      product:item?.product,
       name:item?.name,
       price:item?.price,
       image:item?.image,
       stock:item?.stock,
       quantity: newQty,
+      product:item?.product,
   };
   dispatch(setCartItem(cartItem));
   

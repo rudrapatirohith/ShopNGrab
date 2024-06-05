@@ -5,7 +5,7 @@ import { allOrders, deleteOrder, getOrderDetails, myOrders, newOrder, updateOrde
 import {authorizeRoles, userAuthenticated} from "../middleware/auth.js"
 
 
-router.route("/orders/new").post(userAuthenticated,newOrder);
+router.route("/order/new").post(userAuthenticated,newOrder);
 router.route("/orders/:id").get(userAuthenticated,getOrderDetails);
 router.route("/profile/orders").get(userAuthenticated,myOrders);
 router.route("/admin/orders").get(userAuthenticated,authorizeRoles("admin"),allOrders);

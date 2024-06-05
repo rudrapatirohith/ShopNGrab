@@ -28,20 +28,27 @@ export const newOrder = catchAsyncErrors(async (req, res, next) => {
         paymentMethod,
         user: req.user._id,
     })
+    res.status(200).json({
+        success: true,
+        order,
+    })
 
-    //Updating Product stock
-    order?.orderItems?.forEach(async(item)=>{
-
-        const product = await Product.findById(item?.product?.toString());
-        if(!product){
-            return next(new ErrorHandler("No Product found with id: ",404));
-        }
-        product.stock = product.stock - item?.quantity;
-        await product.save({validateBeforeSave:false});  //now it wont do checking for validations before saving 
-        })
-
-    res.status(200).json({order});
 })
+
+
+//     //Updating Product stock
+//     order?.orderItems?.forEach(async(item)=>{
+
+//         const product = await Product.findById(item?.product?.toString());
+//         if(!product){
+//             return next(new ErrorHandler("No Product found with id: ",404));
+//         }
+//         product.stock = product.stock - item?.quantity;
+//         await product.save({validateBeforeSave:false});  //now it wont do checking for validations before saving 
+//         })
+
+//     res.status(200).json({order});
+// })
 
 
 
@@ -61,7 +68,11 @@ export const getOrderDetails = catchAsyncErrors(async(req,res,next)=>{
 // Get Current user Order Details => /api/shopngrab/profile/orders
 export const myOrders= catchAsyncErrors(async(req,res,next)=>{
     const order=await Order.find({user: req.user._id}).populate("user","name email"); // shows name email of user in res and store in db as we using populate
-    res.status(200).json({order});
+
+    if(!order){
+        return next(new ErrorHandler("No orders found", 404));
+    }
+    res.status(200).json({order,});
 })
 
 
