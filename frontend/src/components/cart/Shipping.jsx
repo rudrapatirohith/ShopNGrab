@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { saveShippingInfo } from '../../redux/features/cartSlice'
 import { useNavigate } from 'react-router-dom'
 import PageTitle from '../layouts/PageTitle'
+import CheckoutSteps from './CheckoutSteps.jsx';
 
 const Shipping = () => {
     const countriesList = Object.values(countries)
@@ -31,11 +32,12 @@ const Shipping = () => {
         e.preventDefault();
 
         dispatch(saveShippingInfo({address,city,phoneNo,zipCode,country}))
-
+        navigate('/confirm_order');
     }
   return (
     <>
     <PageTitle title={"Shipping Info"}/>
+    <CheckoutSteps shipping />
      <div className="row wrapper mb-5">
       <div className="col-10 col-lg-5">
         <form
@@ -114,7 +116,7 @@ const Shipping = () => {
             </select>
           </div>
 
-          <button id="shipping_btn" type="submit" className="btn w-100 py-2" onClick={navigate('/confirm_order')}>
+          <button id="shipping_btn" type="submit" className="btn w-100 py-2" >
             CONTINUE
           </button>
         </form>
