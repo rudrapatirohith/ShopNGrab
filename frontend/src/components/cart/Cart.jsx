@@ -1,11 +1,12 @@
 import React from 'react'
 import PageTitle from '../layouts/PageTitle'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setCartItem,removeCartItem } from '../../redux/features/cartSlice';
 
 const Cart = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart)
 
   const increaseQty = (item,quantity)=>{
@@ -36,6 +37,9 @@ const SetItemToCart = (item,newQty) => {
 const removeCartItemHandler = (id)=>{
     dispatch(removeCartItem(id))
 };
+const checkOutHandler = ( )=>{
+    navigate("/shipping");
+}
   return (
     <>
       <PageTitle title={"Your cart"} />
@@ -94,7 +98,7 @@ const removeCartItemHandler = (id)=>{
                 <p>Units: <span className="order-summary-values">{cartItems?.reduce((acc,item)=> acc + item?.quantity,0)}{" "}(Units)</span></p>
                 <p>Est. total: <span className="order-summary-values">${cartItems?.reduce((acc,item)=> acc + item?.quantity * item.price,0).toFixed(2)}</span></p>
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary w-100">
+                <button id="checkout_btn" className="btn btn-primary w-100" onClick={checkOutHandler}>
                   Check out
                 </button>
               </div>
