@@ -29,12 +29,16 @@ import authRoutes from "./routes/auth.js"
 
 import orderRoutes from "./routes/order.js"
 
+import paymentRoutes from "./routes/payment.js"
+
 // if someone visits my server at /api/shopvibe/products, they'll be handled by the productRoutes.
 app.use("/api/shopngrab",productRoutes);
 
 app.use("/api/shopngrab",authRoutes);
 
 app.use("/api/shopngrab",orderRoutes);
+
+app.use("/api/shopngrab",paymentRoutes);
 
 //using error middleware
 app.use(errorMiddleware);
