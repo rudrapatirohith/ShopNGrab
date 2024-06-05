@@ -91,8 +91,8 @@ const removeCartItemHandler = (id)=>{
               <div id="order_summary">
                 <h4>Order Summary</h4>
                 <hr />
-                <p>Subtotal: <span className="order-summary-values">8 (Units)</span></p>
-                <p>Est. total: <span className="order-summary-values">$1499.97</span></p>
+                <p>Units: <span className="order-summary-values">{cartItems?.reduce((acc,item)=> acc + item?.quantity,0)}{" "}(Units)</span></p>
+                <p>Est. total: <span className="order-summary-values">${cartItems?.reduce((acc,item)=> acc + item?.quantity * item.price,0).toFixed(2)}</span></p>
                 <hr />
                 <button id="checkout_btn" className="btn btn-primary w-100">
                   Check out
