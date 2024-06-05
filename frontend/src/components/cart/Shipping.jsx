@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {countries} from 'countries-list'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveShippingInfo } from '../../redux/features/cartSlice'
+import { useNavigate } from 'react-router-dom'
+import PageTitle from '../layouts/PageTitle'
 
 const Shipping = () => {
     const countriesList = Object.values(countries)
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [address,setAddress] = useState("");
     const [city,setCity] = useState("");
@@ -33,6 +35,7 @@ const Shipping = () => {
     }
   return (
     <>
+    <PageTitle title={"Shipping Info"}/>
      <div className="row wrapper mb-5">
       <div className="col-10 col-lg-5">
         <form
@@ -108,11 +111,10 @@ const Shipping = () => {
                     
                     <option key={country?.name} value={country?.name}>{country.name}</option>
                 ))}
-              {/* <!-- Add more options for different countries --> */}
             </select>
           </div>
 
-          <button id="shipping_btn" type="submit" className="btn w-100 py-2" >
+          <button id="shipping_btn" type="submit" className="btn w-100 py-2" onClick={navigate('/confirm_order')}>
             CONTINUE
           </button>
         </form>
