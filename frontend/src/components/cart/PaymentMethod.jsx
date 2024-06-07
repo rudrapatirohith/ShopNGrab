@@ -37,7 +37,7 @@ const PaymentMethod = () => {
 
     if(isSuccess){
       toast.success("Order Placed")
-      navigate('/')
+      navigate("/me/orders?order_success=true");
     }
    },[error,isSuccess]);
 
@@ -65,8 +65,9 @@ const PaymentMethod = () => {
            };
            console.log(orderData)
            createNewOrder(orderData);
+           
         }
-        if(method==="Card"){
+        else if(method==="Card"){
             //stripe checkout
             const orderData = {
               shippingInfo,
@@ -76,8 +77,11 @@ const PaymentMethod = () => {
               taxAmount: taxPrice,
               totalAmount:totalPrice,
              };
-             console.log(orderData)
+            //  console.log(orderData)
              stripeCheckoutSession(orderData);
+          }
+          else{
+            toast.error("Please select a payment method");
           }
         }
     
