@@ -4,7 +4,7 @@ export const orderApi = createApi({ //Creates an API slice using createApi and e
     reducerPath: "orderApi",    // Sets the reducerPath to "productApi", which is the key in the Redux store where the API slice's state will be stored.
     baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/shopngrab" }),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
-        createNewOrder: builder.mutation({  // Creates a query endpoint named getProducts.
+        createNewOrder: builder.mutation({  
             query: (body) => {
                 return {
                     url: "/order/new",
@@ -13,7 +13,7 @@ export const orderApi = createApi({ //Creates an API slice using createApi and e
                 }
             },
         }),
-        stripeCheckoutSession: builder.mutation({  // Creates a query endpoint named getProducts.
+        stripeCheckoutSession: builder.mutation({  
             query: (body) => {
                 return {
                     url: "/payment/checkout_session",
@@ -22,7 +22,10 @@ export const orderApi = createApi({ //Creates an API slice using createApi and e
                 }
             },
         }),
+        MyOrders: builder.query({  // Creates a query endpoint named MyOrders.
+            query: () => `/profile/orders`,
+        }),
     })
 })
 
-export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation
