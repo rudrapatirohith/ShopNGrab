@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import Loader from "../layouts/Loader"
 import {MDBDataTable} from 'mdbreact'
 import { Link } from 'react-router-dom';
+import PageTitle from '../layouts/PageTitle';
 
 const MyOrders = () => {
 
@@ -73,6 +74,7 @@ const MyOrders = () => {
     if(isLoading ) return <Loader />
     return (
     <>
+    <PageTitle title={"My Orders"} />
      <div>
         <h1 className="my-5">{data?.order?.length} Orders</h1>
 

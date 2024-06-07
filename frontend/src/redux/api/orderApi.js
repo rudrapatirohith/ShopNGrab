@@ -22,10 +22,13 @@ export const orderApi = createApi({ //Creates an API slice using createApi and e
                 }
             },
         }),
-        MyOrders: builder.query({  // Creates a query endpoint named MyOrders.
+        myOrders: builder.query({  // Creates a query endpoint named MyOrders.
             query: () => `/profile/orders`,
+        }),
+        orderDetails: builder.query({  // Creates a query endpoint named MyOrders.
+            query: (id) => `/orders/${id}`,
         }),
     })
 })
 
-export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery,useOrderDetailsQuery} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation
