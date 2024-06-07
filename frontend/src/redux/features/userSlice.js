@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
-    isAuthenticated: false,
+    userAuthenticated: false,
     loading: true,
 };
 
@@ -14,7 +14,7 @@ export const userSlice = createSlice({
             state.user = action.payload;
         },
         setIsAuthenticated(state,action){
-            state.isAuthenticated = action.payload;
+            state.userAuthenticated = action.payload;
         },
         setIsLoading(state,action){
             state.loading= action.payload;

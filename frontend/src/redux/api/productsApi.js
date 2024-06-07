@@ -3,6 +3,7 @@ import {createApi , fetchBaseQuery} from '@reduxjs/toolkit/query/react'  // impo
 export const productApi = createApi({ //Creates an API slice using createApi and exports it as productApi.
     reducerPath: "productApi",    // Sets the reducerPath to "productApi", which is the key in the Redux store where the API slice's state will be stored.
     baseQuery: fetchBaseQuery({baseUrl:"http://localhost:3000/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
+    tagTypes: ["Product"],
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
         getProducts: builder.query({  // Creates a query endpoint named getProducts.
             query: (params) => ({
@@ -19,8 +20,22 @@ export const productApi = createApi({ //Creates an API slice using createApi and
         // Defines the endpoints using a builder function to create API endpoints(get etc).
         getProductDetails: builder.query({  // Creates a query endpoint named getProducts.
             query: (id) => `/products/${id}`,  // Specifies the query function that returns the endpoint path for fetching products.
+            providesTags:["Product"]
+        }),
+        canUserReview: builder.query({  // Creates a query endpoint named getProducts.
+            query: (productId) => `/can_review/?productId=${productId}`,  // Specifies the query function that returns the endpoint path for fetching products.
+        }),
+        submitReview: builder.mutation({  
+            query(body){
+                return {
+                    url: "/reviews",
+                    method: 'PUT',
+                    body,
+                }
+            },
+            invalidatesTags:["Product"]
         }),
     })
 })
 
-export const {useGetProductsQuery, useGetProductDetailsQuery} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation
+export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation

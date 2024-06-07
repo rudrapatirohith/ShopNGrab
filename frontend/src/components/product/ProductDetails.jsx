@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import Loader from '../layouts/Loader.jsx';
 import toast from "react-hot-toast";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCartItem } from '../../redux/features/cartSlice.js';
 import PageTitle from '../layouts/PageTitle.jsx';
+import NewReview from '../reviews/NewReview.jsx';
+import ListReviews from '../reviews/ListReviews.jsx';
 
 const ProductDetails = () => {
     
@@ -15,7 +17,7 @@ const ProductDetails = () => {
     const params = useParams();
     const dispatch = useDispatch();
     const { data ,isLoading,error,isError} = useGetProductDetailsQuery(params?.id);
-
+    const {userAuthenticated} = useSelector((state)=>state.auth)
 
 
     useEffect(()=>{
@@ -104,14 +106,7 @@ const ProductDetails = () => {
                     <hr />
 
                     <div className="d-flex">
-                        <StarRatings
-                            rating={data?.product?.ratings}
-                            starRatedColor="#ECB056"
-                            numberOfStars={5}
-                            name='rating'
-                            starDimension='22px'
-                            starSpacing='1px'
-                        />
+                        C
                         <span id="no-of-reviews" className="pt-1 ps-2"> ({data?.product?.numOfReviews} Reviews) </span>
                     </div>
                     <hr />
@@ -151,17 +146,16 @@ const ProductDetails = () => {
                     </p>
                     <hr />
                     <p id="product_seller mb-3">Sold by: <strong>{data?.product?.seller}</strong></p>
-
+                    
+                    {userAuthenticated?<NewReview productId={data?.product?._id}/>:
                     <div className="alert alert-danger my-5" type="alert">
                         Login to post your review.
                     </div>
+                    }
                 </div>
             </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
-            <script src="https://kit.fontawesome.com/9edb65c86a.js"></script>
-        </>
+{data?.product?.reviews?.length>0 && <ListReviews reviews={data?.product?.reviews} />}
+                   </>
     )
 }
 
