@@ -37,13 +37,13 @@ const Header=()=> {
       <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
         <a href="/cart" style={{textDecoration: "none"}}>
           <span id="cart" className="ms-3"> Cart </span>
-          <span className="ms-1" id="cart_count">{cartItems?.length}</span>
+          <span className="ms-1" id="cart_count">{user?cartItems?.length:"0"}</span>
         </a>
 
         {user ? (
         <div className="ms-4 dropdown">
           <button
-            className="btn dropdown-toggle text-white"
+            className="btn dropdown-toggle text-black"
             type="button"
             id="dropDownMenuButton"
             data-bs-toggle="dropdown"
@@ -56,10 +56,13 @@ const Header=()=> {
                 className="rounded-circle"
               />
             </figure>
-            <span>{user?.name}</span>
+            <span >{user?.name}</span>
           </button>
           <div className="dropdown-menu w-100" aria-labelledby="dropDownMenuButton">
+            {user?.role==='admin' && (
+
             <Link className="dropdown-item" to="/admin/dashboard"> Dashboard </Link>
+            )}
 
             <Link className="dropdown-item" to="/me/orders"> Orders </Link>
 

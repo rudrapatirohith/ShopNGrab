@@ -46,22 +46,22 @@ const Home=()=> {
     if(isLoading) return <Loader />;
   return (
     <>
-    <PageTitle title={"All You Needs are Here"}/>
+    <PageTitle title={"All You Need Is Here"}/>
       <div className="row">
         {keyword && (
-          <div className="col-6 col-md-3 mt-5"> 
+          <div className="col-6 col-md-3 mt-3"> 
           <Filters />
           </div>
         )}
-        <div className={keyword ? "col-6 col-md-9" : "col-6 col-md-12"}>
+        <div className={keyword ? "col-6 col-md-9" : "col-12"}>
           <h1 id="products_heading" className="text-secondary">
            {keyword ? `${data?.products?.length} Products found with Keyword: ${keyword}` : "Latest Products"}
             </h1>
 
-          <section id="products" className="mt-5">
+          <section id="products" className="mt-3">
             <div className="row">
               {data?.products?.map((product)=>(
-                <ProductItem product={product} columnSize={columnSize} />
+                <ProductItem key={product._id} product={product} columnSize={columnSize} />
               ))}
               
             </div>

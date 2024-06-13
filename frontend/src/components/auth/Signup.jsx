@@ -22,16 +22,16 @@ const Signup = () => {
 
     const [register , {isLoading,data,error}]=useSignUpMutation();
 
-    const {isAuthenticated} = useSelector((state)=>state.auth)
+    const {userAuthenticated} = useSelector((state)=>state.auth)
 
     useEffect(()=>{
-      if(isAuthenticated){
+      if(userAuthenticated){
         navigate('/');
       }
         if(error) {
         toast.error(error?.data?.message);
         }
-    },[error,isAuthenticated]);
+    },[error,userAuthenticated]);
 
 
     // console.log(data);

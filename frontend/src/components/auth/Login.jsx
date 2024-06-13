@@ -14,17 +14,18 @@ const Login_Signin = () => {
 
     const [login, {isLoading,error,data}] = useLoginMutation();
 
-    const {isAuthenticated} = useSelector((state)=>state.auth);
+    const {userAuthenticated} = useSelector((state)=>state.auth);
 
     // console.log(data);
 
-   
+   console.log(userAuthenticated);
    useEffect(()=>{
-    if (isAuthenticated) {
+    if (userAuthenticated) {
         navigate('/')
     }
+ 
     if(error){toast.error(error?.data?.message)}
-   },[error,isAuthenticated]);
+   },[error,userAuthenticated]);
 
     const submitHandler = (e) =>{
         e.preventDefault();

@@ -3,29 +3,7 @@ import UserLayout from './UserLayout'
 import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react';
 
-const SidebarMenu = () => {
-
-const menuItems=[{
-    name:"Profile",
-    url: "/me/profile",
-    icon:"fas fa-user",
-},
-{
-    name:"Update Profile",
-    url: "/me/update_profile",
-    icon:"fas fa-user",
-},
-{
-    name:"Upload Avatar",
-    url: "/me/upload_avatar",
-    icon:"fas fa-user-circle",
-},
-{
-    name:"Update Password",
-    url: "/me/update_password",
-    icon:"fas fa-lock",
-},
-];
+const SidebarMenu = ({menuItems}) => {
 
 const location = useLocation();
 
@@ -36,7 +14,7 @@ const handleMenuItemClick =(menuItemUrl)=>{
 }
   return (
     <>  
-    <div className="list-group mt-5 pl-4">
+    <div className="list-group mt-5 ">
         {menuItems?.map((menuItem, index)=>(
       <Link
       key={index}

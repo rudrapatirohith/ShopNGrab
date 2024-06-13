@@ -11,68 +11,68 @@ import NewReview from '../reviews/NewReview.jsx';
 import ListReviews from '../reviews/ListReviews.jsx';
 
 const ProductDetails = () => {
-    
-    const [quantity,setQuantity] = useState(1);
-    const[activeImg, setActiveImg] = useState('');
+
+    const [quantity, setQuantity] = useState(1);
+    const [activeImg, setActiveImg] = useState('');
     const params = useParams();
     const dispatch = useDispatch();
-    const { data ,isLoading,error,isError} = useGetProductDetailsQuery(params?.id);
-    const {userAuthenticated} = useSelector((state)=>state.auth)
+    const { data, isLoading, error, isError } = useGetProductDetailsQuery(params?.id);
+    const { userAuthenticated } = useSelector((state) => state.auth)
 
 
-    useEffect(()=>{
+    useEffect(() => {
         setActiveImg(
             data?.product?.images[0] ? data?.product?.images[0]?.url : '/images/default_product.png'
         )
-    },[data?.product])
+    }, [data?.product])
 
 
-    useEffect(()=>{
-        if(isError){
-          toast.error(error?.data?.message);
+    useEffect(() => {
+        if (isError) {
+            toast.error(error?.data?.message);
         }
-      },[isError]);
-      
-      const increaseQty = ()=>{
-          const count = document.querySelector(".count");
-          if(count.valueAsNumber>=data?.product?.stock) return;
-          const qty = count.valueAsNumber+1;
-          setQuantity(qty);
-      }
-  
-      const decreaseQty=()=>{
-      const count = document.querySelector(".count");
-      if(count.valueAsNumber<=1)return;
-      const qty = count.valueAsNumber-1;
-      setQuantity(qty);
-      }
+    }, [isError]);
 
-      const SetItemToCart = () => {
+    const increaseQty = () => {
+        const count = document.querySelector(".count");
+        if (count.valueAsNumber >= data?.product?.stock) return;
+        const qty = count.valueAsNumber + 1;
+        setQuantity(qty);
+    }
+
+    const decreaseQty = () => {
+        const count = document.querySelector(".count");
+        if (count.valueAsNumber <= 1) return;
+        const qty = count.valueAsNumber - 1;
+        setQuantity(qty);
+    }
+
+    const SetItemToCart = () => {
         const cartItem = {
-            product:data?.product?._id,
-            name:data?.product?.name,
-            price:data?.product?.price,
-            image:data?.product?.images[0]?.url,
-            stock:data?.product?.stock,
+            product: data?.product?._id,
+            name: data?.product?.name,
+            price: data?.product?.price,
+            image: data?.product?.images[0]?.url,
+            stock: data?.product?.stock,
             quantity
         };
         dispatch(setCartItem(cartItem));
         toast.success("Item Added to Cart");
-      };
+    };
 
 
-    if(isLoading){
-       return <Loader />
+    if (isLoading) {
+        return <Loader />
     }
 
 
     return (
         <>
-        <PageTitle title={data?.product?.name}/>
+            <PageTitle title={data?.product?.name} />
             <div className="row d-flex justify-content-around">
                 <div className="col-12 col-lg-5 img-fluid" id="product_image">
                     <div className="p-3">
-                        <img 
+                        <img
                             className="d-block w-100"
                             src={activeImg}
                             alt={data?.product?.name}
@@ -80,18 +80,18 @@ const ProductDetails = () => {
                             height="390"
                         />
                     </div>
-                    <div  className="row justify-content-start mt-5">
-                        {data?.product?.images?.map((img)=>(
-                            
+                    <div className="row justify-content-start mt-5">
+                        {data?.product?.images?.map((img) => (
+
                             <div className="col-2 ms-4 mt-2 mx-4">
                                 <a role="button">
                                     <img
-                                        className={`d-block border rounded p-3 cursor-pointer img_size ${img.url === activeImg ? "border-warning": ""} `}
+                                        className={`d-block border rounded p-3 cursor-pointer img_size ${img.url === activeImg ? "border-warning" : ""} `}
                                         height="100"
                                         width="100"
                                         src={img?.url}
                                         alt={img?.url}
-                                        onClick={(e)=> setActiveImg(img?.url)}
+                                        onClick={(e) => setActiveImg(img?.url)}
                                     />
                                 </a>
                             </div>
@@ -106,7 +106,14 @@ const ProductDetails = () => {
                     <hr />
 
                     <div className="d-flex">
-                        C
+                        <StarRatings
+                            rating={data?.product?.ratings}
+                            starRatedColor="#686868"
+                            numberOfStars={5}
+                            name="rating"
+                            starDimension="22px"
+                            starSpacing="5px"
+                        />
                         <span id="no-of-reviews" className="pt-1 ps-2"> ({data?.product?.numOfReviews} Reviews) </span>
                     </div>
                     <hr />
@@ -126,14 +133,14 @@ const ProductDetails = () => {
                         type="button"
                         id="cart_btn"
                         className="btn btn-primary d-inline ms-4"
-                        disabled={data?.product?.stock<=0}
+                        disabled={data?.product?.stock <= 0}
                         onClick={SetItemToCart}
                     >
                         Add to Cart
                     </button>
 
                     <hr />
-                    
+
                     <p>
                         Status: <span id="stock_status" className={data?.product?.stock > 0 ? "greenColor" : "redColor"}>{data?.product?.stock > 0 ? "In Stock" : "Out of Stock"}</span>
                     </p>
@@ -142,20 +149,20 @@ const ProductDetails = () => {
 
                     <h4 className="mt-2">Description:</h4>
                     <p>
-                    {data?.product?.description}
+                        {data?.product?.description}
                     </p>
                     <hr />
                     <p id="product_seller mb-3">Sold by: <strong>{data?.product?.seller}</strong></p>
-                    
-                    {userAuthenticated?<NewReview productId={data?.product?._id}/>:
-                    <div className="alert alert-danger my-5" type="alert">
-                        Login to post your review.
-                    </div>
+
+                    {userAuthenticated ? <NewReview productId={data?.product?._id} /> :
+                        <div className="alert alert-danger my-5" type="alert">
+                            Login to post your review.
+                        </div>
                     }
                 </div>
             </div>
-{data?.product?.reviews?.length>0 && <ListReviews reviews={data?.product?.reviews} />}
-                   </>
+            {data?.product?.reviews?.length > 0 && <ListReviews reviews={data?.product?.reviews} />}
+        </>
     )
 }
 
