@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { allOrders, deleteOrder, getOrderDetails, myOrders, newOrder, updateOrder } from "../controllers/orderControllers.js";
+import { allOrders, deleteOrder, getOrderDetails, getSales, myOrders, newOrder, updateOrder } from "../controllers/orderControllers.js";
 import {authorizeRoles, userAuthenticated} from "../middleware/auth.js"
 
 
@@ -13,5 +13,6 @@ router
     .route("/admin/orders/:id")
     .put(userAuthenticated,authorizeRoles("admin"),updateOrder)
     .delete(userAuthenticated,authorizeRoles("admin"),deleteOrder);
+router.route("/admin/get_sales").get(userAuthenticated,authorizeRoles("admin"),getSales);
 
 export default router 

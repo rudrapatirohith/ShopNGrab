@@ -3,6 +3,7 @@ import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
 import Product from "../models/product.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
+import order from "../models/order.js";
 
 
 // gets all Product details GET => /api/shopngrab/products
@@ -45,7 +46,7 @@ export const newProduct=catchAsyncErrors( async (req,res)=>{
 
 // Get Products details based on id  GET=> /api/shopngrab/admin/products/:id
 export const getProductDetails = catchAsyncErrors(async(req,res,next)=>{
-    const product = await Product.findById(req?.params?.id)
+    const product = await Product.findById(req?.params?.id).populate('reviews.user')
 
     if(!product){
         return next(new ErrorHandler('Product not found',404))
@@ -159,3 +160,17 @@ export const deleteReview = catchAsyncErrors(async(req,res,next)=>{
 
     res.status(200).json({success:true,product})
 })
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Can user Review => /api/shopngrab/can_review
+export const canUserReview = catchAsyncErrors(async(req,res,next)=>{
+    const orders = await order.find({
+        user: req.user._id,
+        "orderItems.product": req.query.productId,
+    });
+    if(orders.length===0){
+        return res.status(200).json({canReview: false})
+    }
+   res.status(200).json({canReview: true})
+});
