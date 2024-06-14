@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import Loader from "../layouts/Loader"
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
 import AdminLayout from '../layouts/AdminLayout'
 import { PRODUCT_CATEGORIES } from '../../constants/constants';

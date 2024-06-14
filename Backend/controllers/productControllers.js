@@ -4,6 +4,7 @@ import Product from "../models/product.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
 import order from "../models/order.js";
+import { upload_file } from "../utils/cloudinary.js";
 
 
 // gets all Product details GET => /api/shopngrab/products
@@ -76,6 +77,28 @@ export const updateProductDetails = catchAsyncErrors(async(req,res)=>{
     product= await Product.findByIdAndUpdate(req?.params?.id, req.body,
         { new : true } )    // checks the id and if its correct and will check what req we got in body i mean what change and new: true will update the data
     res.status(200).json({product})
+}
+);
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Upload  Product images    PUT => /api/shopngrab/admin/products/:id/upload_images
+export const uploadProductImages = catchAsyncErrors(async(req,res)=>{
+    let product = await Product.findById(req?.params?.id)
+    if(!product){
+        return next(new ErrorHandler('Product not found',404))
+    }
+
+    const uploader = async(image)=> upload_file(image,"shopngrab/products")
+
+    const urls = await Promise.all((req?.body?.images).map(uploader))
+
+    product?.images?.push(...urls);
+if (!product.user) {
+    product.user = req.user.id; // Assuming `req.user` contains the authenticated user's info
+}
+    await product?.save()
+      res.status(200).json({product})
 }
 );
 
