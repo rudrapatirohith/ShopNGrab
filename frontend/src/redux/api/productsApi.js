@@ -69,7 +69,17 @@ export const productApi = createApi({ //Creates an API slice using createApi and
             },
         invalidatesTags: ["Product"],
         }),
+        deleteProductImage : builder.mutation({  
+            query({id,body}){
+                return {
+                    url: `/admin/products/${id}/delete_image`,
+                    method: 'PUT',
+                    body,
+                }
+            },
+        invalidatesTags: ["Product"],
+        }),
     })
 })
 
-export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation
+export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation,useDeleteProductImageMutation} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation

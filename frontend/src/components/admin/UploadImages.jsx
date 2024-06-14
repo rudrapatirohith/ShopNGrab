@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AdminLayout from '../layouts/AdminLayout'
 import {  useNavigate, useParams } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
-import { useGetProductDetailsQuery, useUploadProductImagesMutation } from '../../redux/api/productsApi';
+import { useDeleteProductImageMutation, useGetProductDetailsQuery, useUploadProductImagesMutation } from '../../redux/api/productsApi';
 import toast from 'react-hot-toast';
 
 const UploadImages = () => {
@@ -19,20 +19,26 @@ const UploadImages = () => {
 
     const [uploadProductImages,{isLoading,isSuccess,error}]=useUploadProductImagesMutation();
 
+    const [deleteProductImage,{isLoading:isDeleteLoading,error:deleteError}] = useDeleteProductImageMutation();
+
     useEffect(()=>{
         if(data?.product){
             setUploadedImages(data?.product?.images);
         }
-        console.log(error);
         if(error){
             toast.error(error?.data?.message);
+        }
+        if(deleteError){
+            toast.error(deleteError?.data?.message);
         }
         if(isSuccess){
             setImagesPreview([]);
             toast.success("Images Uploaded");
             navigate("/admin/products");
         }
-    },[data,error,isSuccess])
+        console.log(deleteError);
+
+    },[data,error,isSuccess,deleteError])
 
     const onChange = (e)=>{
 
@@ -69,7 +75,9 @@ const UploadImages = () => {
         e.preventDefault();
         uploadProductImages({id: params?.id, body: {images}});
       }
-
+      const deleteImage=(imgId)=>{
+        deleteProductImage({id:params?.id,body:{imgId}})
+      }
   return (
     <AdminLayout>
         <PageTitle title={"Upload Product Images"}/>
@@ -124,7 +132,7 @@ const UploadImages = () => {
             </div>
 
 }
-{uploadedImages>0 && 
+{uploadedImages?.length>0 && 
             <div className="uploaded-images my-4">
               <p className="text-success">Product Uploaded Images:</p>
               <div className="row mt-1">
@@ -140,8 +148,9 @@ const UploadImages = () => {
                     <button
                       style={{backgroundColor: "#dc3545", borderColor: "#dc3545",}}
                       className="btn btn-block btn-danger cross-button mt-1 py-0"
-                      disabled="true"
+                      disabled={isLoading||isDeleteLoading}
                       type="button"
+                      onClick={()=> deleteImage(img?.public_id)}
                     >
                       <i className="fa fa-trash"></i>
                     </button>
@@ -155,7 +164,7 @@ const UploadImages = () => {
          
           </div>
 
-          <button id="register_button" type="submit" className="btn w-100 py-2" disabled={isLoading}>
+          <button id="register_button" type="submit" className="btn w-100 py-2" disabled={isLoading || isDeleteLoading}>
             {isLoading ? "Uploading ..." : "Upload"}
           </button>
         </form>

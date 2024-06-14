@@ -1,5 +1,5 @@
 import express from "express";
-import {canUserReview, createProductReview, deleteProductDetails, deleteReview, getAdminProducts, getProductDetails, getProductReviews, getProducts, newProduct, updateProductDetails, uploadProductImages} from "../controllers/productControllers.js";
+import {canUserReview, createProductReview, deleteProductDetails, deleteProductImage, deleteReview, getAdminProducts, getProductDetails, getProductReviews, getProducts, newProduct, updateProductDetails, uploadProductImages} from "../controllers/productControllers.js";
 import {userAuthenticated, authorizeRoles} from "../middleware/auth.js";
 const router = express.Router();
 
@@ -19,6 +19,8 @@ router.route("/admin/products/:id").put(userAuthenticated, authorizeRoles("admin
 router.route("/admin/products/:id").delete(userAuthenticated, authorizeRoles("admin"),deleteProductDetails);
 
 router.route("/admin/products/:id/upload_images").put(userAuthenticated, authorizeRoles("admin"),uploadProductImages);
+
+router.route("/admin/products/:id/delete_image").put(userAuthenticated, authorizeRoles("admin"),deleteProductImage);
 
 
 router

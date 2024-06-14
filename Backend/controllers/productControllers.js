@@ -4,7 +4,7 @@ import Product from "../models/product.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
 import order from "../models/order.js";
-import { upload_file } from "../utils/cloudinary.js";
+import { delete_file, upload_file } from "../utils/cloudinary.js";
 
 
 // gets all Product details GET => /api/shopngrab/products
@@ -98,6 +98,30 @@ if (!product.user) {
     product.user = req.user.id; // Assuming `req.user` contains the authenticated user's info
 }
     await product?.save()
+      res.status(200).json({product})
+}
+);
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Delete  Product images    PUT => /api/shopngrab/admin/products/:id/delete_image
+export const deleteProductImage = catchAsyncErrors(async(req,res)=>{
+    let product = await Product.findById(req?.params?.id)
+    if(!product){
+        return next(new ErrorHandler('Product not found',404))
+    }
+
+    const isDeleted = await delete_file(req.body.imgId);
+
+    if(isDeleted){
+        product.images = product?.images?.filter(
+
+            (img)=>img.public_id !== req.body.imgId
+        )
+    await product?.save()
+    }
+    
       res.status(200).json({product})
 }
 );
