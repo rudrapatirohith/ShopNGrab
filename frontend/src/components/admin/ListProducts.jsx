@@ -6,24 +6,35 @@ import { Link } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
 import { useDispatch } from 'react-redux';
 import { clearCart } from '../../redux/features/cartSlice';
-import { useGetAdminProductsQuery } from '../../redux/api/productsApi';
+import {  useDeleteProductMutation, useGetAdminProductsQuery } from '../../redux/api/productsApi';
 import AdminLayout from '../layouts/AdminLayout';
 
 const ListProducts = () => {
 
     const {data, isLoading,error} = useGetAdminProductsQuery();
   
-
+    const [deleteProduct,{isLoading: isDeleteLoading, error: deleteError,isSuccess}]=useDeleteProductMutation();
     
     useEffect(()=>{
         if(error){
             toast.error(error?.data?.message);
         }
 
+        if(deleteError){
+            toast.error(deleteError?.data?.message);
+        }
+        if(isSuccess){
+            toast.success("Product Deleted");
+        }
+        console.log(deleteError);
         
-    },[error])
+    },[error,deleteError,isSuccess])
 
-    console.log(data);
+    // console.log(data);
+    const deleteProductHandler = (id) => {
+        deleteProduct(id);
+    }
+
 
     const setProducts = () => {
 
@@ -63,7 +74,7 @@ const ListProducts = () => {
 
                         <Link to={`/admin/products/${product?._id}`} className="btn btn-outline-primary"><i className="fa fa-pencil"></i></Link>
                         <Link to={`/admin/products/${product?._id}/upload_images`} className="btn btn-outline-success ms-2"><i className="fa fa-image"></i></Link>
-                        <button  className="btn btn-outline-danger ms-2"><i className="fa fa-trash"></i></button>
+                        <button  className="btn btn-outline-danger ms-2"><i className="fa fa-trash" onClick={()=>deleteProductHandler(product?._id)} disabled={isDeleteLoading}></i></button>
 
                         </>
                     ),
