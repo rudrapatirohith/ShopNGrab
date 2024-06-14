@@ -1,21 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminLayout from '../layouts/AdminLayout'
 import DatePicker from "react-datepicker";
 import SalesChart from "../charts/SalesChart.jsx"
 import "react-datepicker/dist/react-datepicker.css";
+import { useLazyGetDashboardSalesQuery } from '../../redux/api/orderApi.js';
+import toast from 'react-hot-toast';
+import Loader from '../layouts/Loader.jsx'
 
 const Dashboard = () => {
 
     const [startDate, setStartDate] = useState(new Date().setDate(1));
   const [endDate, setEndDate] = useState(new Date());
 
-  const submitHandler = () => {
-    console.log("==============================");
-    console.log(new Date(startDate).toISOString());
-    console.log(endDate.toISOString());
-    console.log("==============================");
+  const [getDashboardSales, {error,isLoading,data}]=useLazyGetDashboardSalesQuery();
 
+  useEffect(()=>{
+    if(error){
+      toast.error(error?.data?.message);
+    }
+
+    if(startDate && endDate && !data){
+      getDashboardSales({
+        startDate: new Date(startDate).toISOString(),
+        endDate: endDate.toISOString(),
+      })
+  }},[error]);
+
+  const submitHandler = () => {
+    getDashboardSales({
+      startDate: new Date(startDate).toISOString(),
+      endDate: endDate.toISOString(),
+    })
   }
+
+  if(isLoading){
+    return <Loader /> 
+  }
+  console.log(data);
   return (
     <AdminLayout>
       <div className="d-flex justify-content-start align-items-center">
@@ -51,7 +72,7 @@ const Dashboard = () => {
             <div className="text-center card-font-size">
               Sales
               <br />
-              <b>$0.00</b>
+              <b>${data?.totalSales.toFixed(2)}</b>
             </div>
           </div>
         </div>
@@ -63,13 +84,13 @@ const Dashboard = () => {
             <div className="text-center card-font-size">
               Orders
               <br />
-              <b>0</b>
+              <b>{data?.totalNumOrders}</b>
             </div>
           </div>
         </div>
       </div>
     </div>
-<SalesChart />
+<SalesChart salesData={data?.sales}/>
     </AdminLayout>
   )
 }
