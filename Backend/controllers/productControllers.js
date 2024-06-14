@@ -58,6 +58,14 @@ export const getProductDetails = catchAsyncErrors(async(req,res,next)=>{
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Get Products - ADMIN  GET=> /api/shopngrab/admin/products
+export const getAdminProducts = catchAsyncErrors(async(req,res,next)=>{
+    const products = await Product.find()
+    res.status(200).json({products})
+}
+);
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Update  Product   PUT => /api/shopngrab/admin/products/:id
 export const updateProductDetails = catchAsyncErrors(async(req,res)=>{

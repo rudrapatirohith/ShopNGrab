@@ -6,9 +6,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useLazyGetDashboardSalesQuery } from '../../redux/api/orderApi.js';
 import toast from 'react-hot-toast';
 import Loader from '../layouts/Loader.jsx'
+import PageTitle from '../layouts/PageTitle.jsx';
 
 const Dashboard = () => {
-
     const [startDate, setStartDate] = useState(new Date().setDate(1));
   const [endDate, setEndDate] = useState(new Date());
 
@@ -39,6 +39,8 @@ const Dashboard = () => {
   console.log(data);
   return (
     <AdminLayout>
+      <PageTitle title={"Admin Dashboard"}/>
+
       <div className="d-flex justify-content-start align-items-center">
       <div className="mb-3 me-4">
         <label className="form-label d-block">Start Date</label>
