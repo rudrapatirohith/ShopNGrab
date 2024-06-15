@@ -28,10 +28,13 @@ export const orderApi = createApi({ //Creates an API slice using createApi and e
         orderDetails: builder.query({  // Creates a query endpoint named MyOrders.
             query: (id) => `/orders/${id}`,
         }),
+        getAdminOrders: builder.query({  // Creates a query endpoint named MyOrders.
+            query: (id) => `/admin/orders`,
+        }),
         getDashboardSales: builder.query({  // Creates a query endpoint named MyOrders. // we us elazy because it will only call onve we click on fetch button
             query: ({startDate,endDate}) => `/admin/get_sales/?startDate=${startDate}&endDate=${endDate}`,
         }),
     })
 })
 
-export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery,useOrderDetailsQuery,useLazyGetDashboardSalesQuery} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation,useMyOrdersQuery,useOrderDetailsQuery,useLazyGetDashboardSalesQuery,useGetAdminOrdersQuery} = orderApi  // useCreateNewOrderMutation -> this is the hook that provides all the products wih this mutation

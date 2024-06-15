@@ -74,7 +74,9 @@ const ListProducts = () => {
 
                         <Link to={`/admin/products/${product?._id}`} className="btn btn-outline-primary"><i className="fa fa-pencil"></i></Link>
                         <Link to={`/admin/products/${product?._id}/upload_images`} className="btn btn-outline-success ms-2"><i className="fa fa-image"></i></Link>
-                        <button  className="btn btn-outline-danger ms-2"><i className="fa fa-trash" onClick={()=>deleteProductHandler(product?._id)} disabled={isDeleteLoading}></i></button>
+                        <button  className="btn btn-outline-danger ms-2" 
+                         onClick={()=>deleteProductHandler(product?._id)} disabled={isDeleteLoading}
+                         ><i className="fa fa-trash"></i></button>
 
                         </>
                     ),
