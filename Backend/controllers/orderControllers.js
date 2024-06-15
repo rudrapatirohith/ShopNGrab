@@ -29,28 +29,21 @@ export const newOrder = catchAsyncErrors(async (req, res, next) => {
         user: req.user._id,
         
     })
-    res.status(200).json({
-        success: true,
-        order,
+    
+        //Updating Product stock
+        order?.orderItems?.forEach(async(item)=>{
+    
+            const product = await Product.findById(item?.product?.toString());
+            if(!product){
+                return next(new ErrorHandler("No Product found with id: ",404));
+            }
+            product.stock = product.stock - item?.quantity;
+            await product.save({validateBeforeSave:false});  //now it wont do checking for validations before saving 
+            })
+    
+        res.status(200).json({success: true,order});
     })
-
-})
-
-
-//     //Updating Product stock
-//     order?.orderItems?.forEach(async(item)=>{
-
-//         const product = await Product.findById(item?.product?.toString());
-//         if(!product){
-//             return next(new ErrorHandler("No Product found with id: ",404));
-//         }
-//         product.stock = product.stock - item?.quantity;
-//         await product.save({validateBeforeSave:false});  //now it wont do checking for validations before saving 
-//         })
-
-//     res.status(200).json({order});
-// })
-
+    
 
 
 
@@ -84,22 +77,51 @@ export const allOrders= catchAsyncErrors(async(req,res,next)=>{
 })
 
 
+
 // Update Order Details - ADMIN => /api/shopngrab/admin/orders/:id
-export const updateOrder= catchAsyncErrors(async(req,res,next)=>{
-    const order=await Order.findById(req.params.id);
-    if(!order){
-        return next(new ErrorHandler("No orders found with id: ",404));
-    }
-    if(order?.orderStatus==='Delivered'){
-        return next(new ErrorHandler("You Have already delivered this order",400));
-    }
+export const updateOrder = catchAsyncErrors(async (req, res, next) => {
 
-    order.orderStatus=req.body.status;
-    order.deliveredAt=Date.now();
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            console.error('No order found with id:', req.params.id);
+            return next(new ErrorHandler("No orders found with id: " + req.params.id, 404));
+        }
+        console.log('Order found:', order);
 
-    await order.save();
-    res.status(200).json({success: true});
-})
+        if (order.orderStatus === 'Delivered') {
+            console.error('Order already delivered:', req.params.id);
+            return next(new ErrorHandler("You have already delivered this order", 400));
+        }
+
+        let productNotFound = false;
+        // Update product stock
+        for(const item of order.orderItems){
+            const product = await Product.findById(item.product.toString());
+            if (!product) {
+                           productNotFound = true;
+                           break
+                        }
+          product.stock = product.stock - item.quantity;
+          await product.save({ validateBeforeSave: false });
+                    }
+                    if(productNotFound){
+                        return next(new ErrorHandler("No Products found with one or more IDs.",404));
+                    }
+
+    
+        order.orderStatus = req.body.status;
+        if (req.body.status === "Delivered") {
+            order.deliveredAt = Date.now();
+        }
+
+        console.log('Saving updated order');
+        await order.save();
+        console.log('Order updated successfully');
+
+        res.status(200).json({ success: true });
+    }); 
+
+
 
 // Delete Order Details - ADMIN => /api/shopngrab/admin/orders/delete/:id
 export const deleteOrder = catchAsyncErrors(async(req,res,next)=>{
