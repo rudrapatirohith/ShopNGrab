@@ -5,33 +5,32 @@ import {MDBDataTable} from 'mdbreact'
 import { Link } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
 import AdminLayout from '../layouts/AdminLayout';
-import { useGetAdminOrdersQuery } from '../../redux/api/orderApi';
+import { useDeleteOrderMutation, useGetAdminOrdersQuery } from '../../redux/api/orderApi';
 
 const ListOrders = () => {
 
     const {data, isLoading,error} = useGetAdminOrdersQuery();
   
+    const [deleteOrder,{error: deleteError, isSuccess,isLoading:isDeleteLoading} ] = useDeleteOrderMutation();
     
     useEffect(()=>{
         if(error){
             toast.error(error?.data?.message);
+        }      
+        if(deleteError){
+            toast.error(deleteError?.data?.message);
         }
-
+        if(isSuccess){
+            toast.success("Order Deleted");
+        }
+        console.log(deleteError);
         
-        // if(deleteError){
-        //     toast.error(deleteError?.data?.message);
-        // }
-        // if(isSuccess){
-        //     toast.success("Product Deleted");
-        // }
-        // console.log(deleteError);
-        
-    },[error])
+    },[error,deleteError,isSuccess])
 
     console.log(data);
-    // const deleteProductHandler = (id) => {
-    //     deleteProduct(id);
-    // }
+    const deleteOrderHandler = (id) => {
+        deleteOrder(id);
+    }
     
 
 
@@ -73,7 +72,7 @@ const ListOrders = () => {
 
                         <Link to={`/admin/orders/${order?._id}`} className="btn btn-outline-primary"><i className="fa fa-pencil"></i></Link>
                         <button  className="btn btn-outline-danger ms-2" 
-                        // onClick={()=>deleteProductHandler(order?._id)} disabled={isDeleteLoading}
+                        onClick={()=>deleteOrderHandler(order?._id)} disabled={isDeleteLoading}
                         >
                             <i className="fa fa-trash" >  </i>
                             </button>
