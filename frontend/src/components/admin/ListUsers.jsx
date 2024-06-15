@@ -5,32 +5,33 @@ import {MDBDataTable} from 'mdbreact'
 import { Link } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
 import AdminLayout from '../layouts/AdminLayout';
-import { useGetAdminUsersQuery } from '../../redux/api/userApi';
+import { useDeleteUserMutation, useGetAdminUsersQuery } from '../../redux/api/userApi';
 
 const ListUsers = () => {
 
     const {data, isLoading,error} = useGetAdminUsersQuery();
   
-    // const [deleteUser,{error: deleteError, isSuccess,isLoading:isDeleteLoading} ] = useDeleteOrderMutation();
+    const [deleteUser,{error: deleteError, isSuccess,isLoading:isDeleteLoading} ] = useDeleteUserMutation();
     
     useEffect(()=>{
         if(error){
             toast.error(error?.data?.message);
         }      
-        // if(deleteError){
-        //     toast.error(deleteError?.data?.message);
-        // }
-        // if(isSuccess){
-        //     toast.success("User Deleted");
-        // }
-        // console.log(deleteError);
+        if(deleteError){
+            toast.error(deleteError?.data?.message);
+        }
+        if(isSuccess){
+            toast.success("User Deleted");
+        }
+        console.log(deleteError);
         
-    },[error])
-
-    // console.log(data);
-    // const deleteUserHandler = (id) => {
-    //     deleteUser(id);
-    // }
+    },[error,deleteError,isSuccess])
+console.log("--------------");
+    console.log(data);
+    console.log("--------------");
+    const deleteUserHandler = (id) => {
+        deleteUser(id);
+    }
     
 
 
@@ -66,7 +67,7 @@ const ListUsers = () => {
             ],
             rows:[],
         };
-
+console.log(data?.user);
         data?.user?.forEach((user)=>{
             users.rows.push({
                     id: user?._id,                                                                                                               
@@ -78,7 +79,7 @@ const ListUsers = () => {
 
                         <Link to={`/admin/users/${user?._id}`} className="btn btn-outline-primary"><i className="fa fa-pencil"></i></Link>
                         <button  className="btn btn-outline-danger ms-2" 
-                        // onClick={()=>deleteUserHandler(user?._id)} disabled={isDeleteLoading}
+                        onClick={()=>deleteUserHandler(user?._id)} disabled={isDeleteLoading}
                         >
                             <i className="fa fa-trash" >  </i>
                             </button>
@@ -88,6 +89,7 @@ const ListUsers = () => {
             })
         })
         console.log(users);
+        // console.log();
         return users;
     }
 

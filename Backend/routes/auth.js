@@ -15,6 +15,6 @@ router.route('/profile/upload_avatar').put(userAuthenticated,uploadAvatar);
 router.route('/admin/users').get(userAuthenticated,authorizeRoles('admin'),getAllUsers);
 router.route('/admin/users/:id').get(userAuthenticated,authorizeRoles('admin'),getUserDetails);
 router.route('/admin/users/:id').put(userAuthenticated,authorizeRoles('admin'),updateUser);
-router.route('/admin/users/delete/:id').delete(userAuthenticated,authorizeRoles('admin'),deleteUser);
+router.route('/admin/users/:id').delete(userAuthenticated,authorizeRoles('admin'),deleteUser);
 
 export default router;
