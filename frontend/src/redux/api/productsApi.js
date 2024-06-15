@@ -3,7 +3,7 @@ import {createApi , fetchBaseQuery} from '@reduxjs/toolkit/query/react'  // impo
 export const productApi = createApi({ //Creates an API slice using createApi and exports it as productApi.
     reducerPath: "productApi",    // Sets the reducerPath to "productApi", which is the key in the Redux store where the API slice's state will be stored.
     baseQuery: fetchBaseQuery({baseUrl:"http://localhost:3000/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
-    tagTypes: ["Product","AdminProducts"],
+    tagTypes: ["Product","AdminProducts","Reviews"],
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
         getProducts: builder.query({  // Creates a query endpoint named getProducts.
             query: (params) => ({
@@ -90,8 +90,18 @@ export const productApi = createApi({ //Creates an API slice using createApi and
         }),
         getProductReviews: builder.query({  // Creates a query endpoint named getProducts.
             query: (productId) => `/reviews?id=${productId}`,  // Specifies the query function that returns the endpoint path for fetching products.
+        providesTags: ["Reviews"]
+        }),
+        deleteReview : builder.mutation({  
+            query({productId,id}){
+                return {
+                    url: `admin/reviews?productId=${productId}&id=${id}`,
+                    method: 'DELETE',
+                }
+            },
+        invalidatesTags: ["Reviews"],
         }),
     })
 })
 
-export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation,useDeleteProductImageMutation,useDeleteProductMutation,useLazyGetProductReviewsQuery} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation
+export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation,useDeleteProductImageMutation,useDeleteProductMutation,useLazyGetProductReviewsQuery,useDeleteReviewMutation} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation

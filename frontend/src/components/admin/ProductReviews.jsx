@@ -5,7 +5,7 @@ import {MDBDataTable} from 'mdbreact'
 import { Link } from 'react-router-dom';
 import PageTitle from '../layouts/PageTitle';
 import AdminLayout from '../layouts/AdminLayout';
-import { useLazyGetProductReviewsQuery } from '../../redux/api/productsApi';
+import { useDeleteReviewMutation, useLazyGetProductReviewsQuery } from '../../redux/api/productsApi';
 
 const ProductReviews = () => {
 
@@ -13,25 +13,30 @@ const ProductReviews = () => {
 
 const [getProductReviews,{data,isLoading,error}] = useLazyGetProductReviewsQuery();  // to call it in submit handler i used lazygetproductreviews() to call only once if i click that button
 
+const [deleteReview,{error: deleteError,isSuccess,isLoading:isDeleteLoading}]= useDeleteReviewMutation();
+
 useEffect(()=>{
     if(error){
         toast.error(error?.data?.message);
     }      
-    // if(deleteError){
-    //     toast.error(deleteError?.data?.message);
-    // }
-    // if(isSuccess){
-    //     toast.success("User Deleted");
-    // }
-    // console.log(deleteError);
+    if(deleteError){
+        toast.error(deleteError?.data?.message);
+    }
+    if(isSuccess){
+        toast.success("Review Deleted");
+    }
+    console.log(deleteError);
     
-},[error])
+},[error,deleteError,isSuccess])
 
     const submitHandler = (e) => {
         e.preventDefault();
         getProductReviews(productId);
     }
-
+console.log(productId);
+    const deleteReviewHandler = (id)=>{
+        deleteReview({productId,id})
+    }
 
     const setReviews = () => {
 
@@ -76,7 +81,7 @@ console.log(data?.reviews);
                         <>
 
                         <button  className="btn btn-outline-danger ms-2" 
-                        // onClick={()=>deleteUserHandler(review?._id)} disabled={isDeleteLoading}
+                        onClick={()=>deleteReviewHandler(review?._id)} disabled={isDeleteLoading}
                         >
                             <i className="fa fa-trash" >  </i>
                             </button>
