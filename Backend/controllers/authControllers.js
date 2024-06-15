@@ -229,7 +229,7 @@ export const getUserDetails = catchAsyncErrors(async(req,res,next)=>{
 })
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//update user => /api/shopngrab/admin/users/update/:id
+//update user => /api/shopngrab/admin/users/:id
 export const updateUser= catchAsyncErrors(async(req,res,next)=>{
     const newUserDetails = {
         name: req.body.name,

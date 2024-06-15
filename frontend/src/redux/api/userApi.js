@@ -5,7 +5,7 @@ import { setUserAuthenticated, setIsLoading, setUser } from '../features/userSli
 export const userApi = createApi({ 
     reducerPath: "userApi",     
     baseQuery: fetchBaseQuery({baseUrl:"http://localhost:3000/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
-    tagTypes: ["User",'AdminUsers'],
+    tagTypes: ["User",'AdminUsers','AdminUser'],
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
         getMe: builder.query({  // for post req we use mutation
            query: () => `/profile`,
@@ -76,9 +76,23 @@ export const userApi = createApi({
             query: () => `/admin/users`,
             providesTags:['AdminUsers']
         }),
+        getUserDetails: builder.query({  // Creates a query endpoint named MyOrders.
+            query: (id) => `/admin/users/${id}`,
+            providesTags:['AdminUser']
+        }),
+        updateUser: builder.mutation({  
+            query: ({id,body}) => {
+                return {
+                    url: `admin/users/${id}`,
+                    method: 'PUT',
+                    body,
+                }
+            },
+            invalidatesTags: ['AdminUsers']
+        }),
         
     })
 })
 
 
-export const {useGetMeQuery,useUpdateProfileMutation,useUploadAvatarMutation,useUpdatePasswordMutation,useForgotPasswordMutation,useResetPasswordMutation,useGetAdminUsersQuery} = userApi;  
+export const {useGetMeQuery,useUpdateProfileMutation,useUploadAvatarMutation,useUpdatePasswordMutation,useForgotPasswordMutation,useResetPasswordMutation,useGetAdminUsersQuery,useUpdateUserMutation,useGetUserDetailsQuery} = userApi;  
