@@ -188,7 +188,7 @@ export const createProductReview = catchAsyncErrors(async(req,res,next)=>{
 
 //Get Product Reviews => /api/shopngrab/reviews/:id
 export const getProductReviews = catchAsyncErrors(async(req,res,next)=>{
-    const product = await Product.findById(req.query.id);
+    const product = await Product.findById(req.query.id).populate('reviews.user');
     if(!product){
         return next(new ErrorHandler("Product not Found",404));
     }

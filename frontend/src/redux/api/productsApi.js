@@ -88,7 +88,10 @@ export const productApi = createApi({ //Creates an API slice using createApi and
             },
         invalidatesTags: ["AdminProducts"],
         }),
+        getProductReviews: builder.query({  // Creates a query endpoint named getProducts.
+            query: (productId) => `/reviews?id=${productId}`,  // Specifies the query function that returns the endpoint path for fetching products.
+        }),
     })
 })
 
-export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation,useDeleteProductImageMutation,useDeleteProductMutation} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation
+export const {useGetProductsQuery, useGetProductDetailsQuery,useSubmitReviewMutation,useCanUserReviewQuery,useGetAdminProductsQuery,useCreateProductMutation,useUpdateProductMutation,useUploadProductImagesMutation,useDeleteProductImageMutation,useDeleteProductMutation,useLazyGetProductReviewsQuery} = productApi  // useGetProductsQuery -> this is the hook that provides all the products wih this mutation
