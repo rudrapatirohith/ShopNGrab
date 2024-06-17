@@ -64,7 +64,6 @@ if(process.env.NODE_ENV==='PRODUCTION'){
     app.use(express.static(path.join(_dirname,"../frontend/build")))
     app.get("*",(req,res)=>{
         res.sendFile(path.resolve(_dirname,"../frontend/build/index.html"))
-        console.log("logg");
     })
 }
 

@@ -30,9 +30,10 @@ const ProductDetails = () => {
 
     useEffect(() => {
         if (isError) {
-            toast.error(error?.data?.message);
+            console.log(error);
+            toast.error(error?.data?.message||'Product Not Found');
         }
-    }, [isError]);
+    }, [isError,error]);
 
     const increaseQty = () => {
         const count = document.querySelector(".count");

@@ -5,7 +5,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
 import order from "../models/order.js";
 import { delete_file, upload_file } from "../utils/cloudinary.js";
-
+import mongoose from "mongoose";
 
 // gets all Product details GET => /api/shopngrab/products
 export const getProducts= catchAsyncErrors(async (req,res,next)=>{
@@ -47,6 +47,14 @@ export const newProduct=catchAsyncErrors( async (req,res)=>{
 
 // Get Products details based on id  GET=> /api/shopngrab/admin/products/:id
 export const getProductDetails = catchAsyncErrors(async(req,res,next)=>{
+
+    const { id } = req.params;
+
+     // Check if the ID is valid
+     if (!mongoose.Types.ObjectId.isValid(id)) {
+        return next(new ErrorHandler('Product not found', 404));
+    }
+
     const product = await Product.findById(req?.params?.id).populate('reviews.user')
 
     if(!product){
