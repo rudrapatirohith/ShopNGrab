@@ -88,7 +88,7 @@ export const userApi = createApi({
                     body,
                 }
             },
-            invalidatesTags: ['AdminUsers']
+            invalidatesTags: ['AdminUsers','AdminUser']
         }),
         deleteUser: builder.mutation({  
             query: (id) => {

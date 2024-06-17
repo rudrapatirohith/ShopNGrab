@@ -9,6 +9,7 @@ import { setCartItem } from '../../redux/features/cartSlice.js';
 import PageTitle from '../layouts/PageTitle.jsx';
 import NewReview from '../reviews/NewReview.jsx';
 import ListReviews from '../reviews/ListReviews.jsx';
+import NotFound from '../layouts/NotFound.jsx';
 
 const ProductDetails = () => {
 
@@ -60,11 +61,15 @@ const ProductDetails = () => {
         toast.success("Item Added to Cart");
     };
 
-
+    
     if (isLoading) {
         return <Loader />
     }
-
+    
+    
+        if(error && error?.status==404){
+            return <NotFound />
+        }
 
     return (
         <>

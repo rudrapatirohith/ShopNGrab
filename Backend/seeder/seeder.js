@@ -4,7 +4,7 @@ import products from "./data.js"
 
 const seedProducts= async ()=>{
     try {
-        await mongoose.connect("mongodb://localhost:27017/shopngrab"); //2 - connected to db
+        await mongoose.connect("mongodb+srv://rudrapatirohith:Rohith%401257@shopngrab.qzq03bm.mongodb.net/shopngrab?retryWrites=true&w=majority&appName=shopngrab"); //2 - connected to db
 
         await Product.deleteMany(); // 3 - delete all the products
         console.log("Products are Deleted");
@@ -17,7 +17,7 @@ const seedProducts= async ()=>{
     } catch (error) {
         
         console.log(error.message);
-        process.exit();
+        process.exit(1);
     }
 };
 
