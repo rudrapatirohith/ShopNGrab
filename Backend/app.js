@@ -60,21 +60,15 @@ app.get('/api/test', (req, res) => {
     res.send({ message: 'API is working' });
 });
 
-// if(process.env.NODE_ENV==='PRODUCTION'){
-//     app.use(express.static(path.join(_dirname,"../frontend/build")))
-//     app.get("*",(req,res)=>{
-//         res.sendFile(path.resolve(_dirname,"../frontend/build/index.html"))
-//         console.log("logg");
-//     })
-// }
+if(process.env.NODE_ENV==='PRODUCTION'){
+    app.use(express.static(path.join(_dirname,"../frontend/build")))
+    app.get("*",(req,res)=>{
+        res.sendFile(path.resolve(_dirname,"../frontend/build/index.html"))
+        console.log("logg");
+    })
+}
 
-// if(process.env.NODE_ENV==='DEVELOPMENT'){
-//     app.use(express.static(path.join(_dirname,"../frontend/build")))
-//     app.get("*",(req,res)=>{
-//         res.sendFile(path.resolve(_dirname,"../frontend/build/index.html"))
-//         console.log("logg");
-//     })
-// }
+
 
 //using error middleware
 app.use(errorMiddleware);
