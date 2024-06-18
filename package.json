@@ -8,17 +8,13 @@
     "start": "node Backend/app.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon Backend/app.js",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon Backend/app.js",
-    "seeder": "node Backend/seeder/seeder.js",
-    "start:frontend": "cd frontend && npm start",
-    "start:backend": "SET NODE_ENV=PRODUCTION&& nodemon Backend/app.js",
-    "both": "node both.js"
+    "seeder": "node Backend/seeder/seeder.js"
   },
   "author": "Rohith Rudrapati",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
-    "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

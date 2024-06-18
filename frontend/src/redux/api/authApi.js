@@ -3,7 +3,7 @@ import { userApi } from './userApi';
 
 export const authApi = createApi({ 
     reducerPath: "authAPi",     
-    baseQuery: fetchBaseQuery({baseUrl:"http://localhost:3000/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
+    baseQuery: fetchBaseQuery({baseUrl:"/api/shopngrab"}),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
         
         // Defines the endpoints using a builder function to create API endpoints(get etc).

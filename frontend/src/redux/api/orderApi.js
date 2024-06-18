@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'  // imp
 
 export const orderApi = createApi({ //Creates an API slice using createApi and exports it as productApi.
     reducerPath: "orderApi",    // Sets the reducerPath to "productApi", which is the key in the Redux store where the API slice's state will be stored.
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/shopngrab" }),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
+    baseQuery: fetchBaseQuery({ baseUrl: "/api/shopngrab" }),  // Defines the baseQuery using fetchBaseQuery with the base URL of the API.
     tagTypes: ['Order','AdminOrders'],
     endpoints: (builder) => ({  // Defines the endpoints using a builder function to create API endpoints(get etc).
         createNewOrder: builder.mutation({  
