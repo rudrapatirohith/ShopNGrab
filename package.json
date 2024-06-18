@@ -11,7 +11,7 @@
     "seeder": "node Backend/seeder/seeder.js",
     "start:frontend": "cd frontend && npm start",
     "start:backend": "SET NODE_ENV=PRODUCTION&& nodemon Backend/app.js",
-    "both": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
+    "both": "node both.js"
   },
   "author": "Rohith Rudrapati",
   "license": "ISC",
