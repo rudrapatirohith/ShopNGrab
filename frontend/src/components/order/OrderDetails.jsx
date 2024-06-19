@@ -36,7 +36,7 @@ const OrderDetails = () => {
       <div className="col-12 col-lg-9 mt-5 order-details">
         <div className="d-flex justify-content-between align-items-center">
           <h3 className="mt-5 mb-4">Your Order Details</h3>
-          <Link className="btn btn-success" to="/invoice/order/order-id">
+          <Link className="btn btn-success" to={`/invoice/order/${order?._id}`}>
             <i className="fa fa-print"></i> Invoice
           </Link>
         </div>

@@ -12,8 +12,9 @@ const ProcessOrder = () => {
 
     const params = useParams()
 
-    const { data } = useOrderDetailsQuery(params?.id);
+    const { data,isLoading,isError } = useOrderDetailsQuery(params?.id);
 
+    console.log(data);
 
     const order = data?.order || {};
 
@@ -44,6 +45,16 @@ const ProcessOrder = () => {
         const data = { status };
         updateOrder({ id, body: data });
     }
+    // console.log(order);
+
+    if (isLoading) {
+        return <Loader />;
+    }
+
+    if (isError) {
+        return <div>Error loading order details.</div>;
+    }
+
     return (
         <AdminLayout>
             <PageTitle title={"Process Order"} />
