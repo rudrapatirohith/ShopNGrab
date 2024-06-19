@@ -131,6 +131,12 @@ nav {
   font-size: 1rem;
 }
 
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .card-img-top {
   width: 150px;
   height: 100px;
@@ -616,5 +622,21 @@ color: #686868;
 
 
 
+@keyframes textAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animated-text span {
+  display: inline-block;
+  opacity: 0;
+  animation: textAppear 0.3s forwards;
+}
 
 

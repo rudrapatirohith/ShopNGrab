@@ -136,7 +136,7 @@ export const deleteOrder = catchAsyncErrors(async(req,res,next)=>{
 })
 
 async function getSalesData(startDate, endDate) {
-    console.log("Fetching sales data between", startDate, "and", endDate);
+    // console.log("Fetching sales data between", startDate, "and", endDate);
 
     const salesData = await Order.aggregate([
         {

@@ -9,7 +9,7 @@ const ProductItem = ({product,columnSize }) => {
    <>
    {/* // if kwyword there we use 4 column size else we use 3 column size */}
    <div className={`col-sm-12 col-md-6 col-lg-${columnSize} my-3`}>  
-                <div className="card p-3 rounded">
+                <div className="card p-3 rounded product-card">
                   <img
                     className="card-img-top mx-auto"
                     src={product?.images[0] ? product?.images[0]?.url : '/images/default_product.png'}
