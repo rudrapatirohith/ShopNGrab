@@ -111,3 +111,15 @@ export const deleteOrder = catchAsyncErrors(async(req,res,next)=>{
     res.status(200).json({message:'Order Deleted'})
 
 })
+
+// Get Sales Data - ADMIN => /api/shopngrab/admin/get_sales
+export const getSales = catchAsyncErrors(async(req,res,next)=>{
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
+
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(23,59,59,999);
+    
+    res.status(200).json({message:'Order Deleted'})
+
+})

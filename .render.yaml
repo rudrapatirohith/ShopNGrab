@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: shopngrab
+    env: node
+    buildCommand: npm install
+    startCommand: npm run both
+    envVars:
+      NODE_ENV: production

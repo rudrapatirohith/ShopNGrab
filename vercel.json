@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "npm run prod", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/.*", "dest": "npm run prod" }
+    ],
+    "env": {
+      "NODE_ENV": "production"
+    },
+    "public": true,
+    "installCommand": "npm install"
+  }
+  
