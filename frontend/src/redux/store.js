@@ -1,4 +1,4 @@
-import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 import { productApi } from "./api/productsApi.js"; // Imports the productApi from the productsApi.js file.
 import { authApi } from "./api/authApi.js";
 import { userApi } from "./api/userApi.js";

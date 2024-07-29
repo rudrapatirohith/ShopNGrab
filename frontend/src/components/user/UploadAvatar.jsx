@@ -73,7 +73,7 @@ const UploadAvatar = () => {
             <div class="d-flex align-items-center">
               <div class="me-3">
                 <figure class="avatar item-rtl">
-                  <img src={avatarPreview} class="rounded-circle" alt="image" />
+                  <img src={avatarPreview} class="rounded-circle" alt="User avatar" />
                 </figure>
               </div>
               <div class="input-foam">
