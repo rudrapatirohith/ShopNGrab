@@ -15,5 +15,5 @@ export const store= configureStore({   //Exports the Redux store named store con
         [userApi.reducerPath]:userApi.reducer,
         [orderApi.reducerPath]:orderApi.reducer,
     },  // Sets the reducer field in the store configuration, using the reducerPath and reducer from productApi
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([productApi.middleware,authApi.middleware,userApi.middleware,orderApi.middleware]),  // Configures the middleware by concatenating the default middleware with productApi.middleware.
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(productApi.middleware,authApi.middleware,userApi.middleware,orderApi.middleware),  // Configures the middleware by concatenating the default middleware with productApi.middleware.
 }) 
