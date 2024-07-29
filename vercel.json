@@ -1,15 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "npm run prod", "use": "@vercel/node" }
-    ],
-    "routes": [
-      { "src": "/.*", "dest": "npm run prod" }
-    ],
-    "env": {
-      "NODE_ENV": "production"
+  "version": 2,
+  "builds": [
+    {
+      "src": "Backend/**/*.js",
+      "use": "@vercel/node"
     },
-    "public": true,
-    "installCommand": "npm install"
-  }
-  
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "frontend/build" }
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "Backend/app.js" },
+    { "src": "/(.*)", "dest": "/frontend/$1" }
+  ]
+}
