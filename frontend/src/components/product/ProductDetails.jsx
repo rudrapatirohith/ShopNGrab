@@ -79,7 +79,7 @@ const ProductDetails = () => {
                 <div className="col-12 col-lg-5 img-fluid" id="product_image">
                     <div className="p-3">
                         <img
-                            className="d-block w-100"
+                            className="d-block w-100 product-image"
                             src={activeImg}
                             alt={data?.product?.name}
                             width="340"
@@ -92,7 +92,7 @@ const ProductDetails = () => {
                             <div className="col-2 ms-4 mt-2 mx-4">
                                 <a role="button">
                                     <img
-                                        className={`d-block border rounded p-3 cursor-pointer img_size ${img.url === activeImg ? "border-warning" : ""} `}
+                                        className={`d-block border rounded p-3 cursor-pointer img_size ${img.url === activeImg ? "border-warning" : ""} thumbnail-image`}
                                         height="100"
                                         width="100"
                                         src={img?.url}
@@ -126,14 +126,14 @@ const ProductDetails = () => {
 
                     <p id="product_price">$ {data?.product?.price}</p>
                     <div className="stockCounter d-inline">
-                        <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
+                        <span className="btn btn-danger minus mx-2" onClick={decreaseQty}>-</span>
                         <input
                             type="number"
                             className="form-control count d-inline"
                             value={quantity}
                             readonly
                         />
-                        <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
+                        <span className="btn btn-primary plus mx-2" onClick={increaseQty}>+</span>
                     </div>
                     <button
                         type="button"

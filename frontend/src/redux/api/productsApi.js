@@ -15,6 +15,7 @@ export const productApi = createApi({ //Creates an API slice using createApi and
                     "price[lte]": params.max,
                     category: params?.category,
                     "ratings[gte]":params?.ratings,
+                    sort: params?.sort,
                 }}),  // Specifies the query function that returns the endpoint path for fetching products.
         }),
         // Defines the endpoints using a builder function to create API endpoints(get etc).

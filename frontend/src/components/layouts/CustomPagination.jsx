@@ -30,7 +30,7 @@ const [currentPage, setCurrentPage] = useState();
   };
   return (
     <>
-    <div className=' d-flex justify-content-center my-5'>
+    <div className=' d-flex justify-content-center my-5 '>
       {filteredProductsCount > resPerPage && (
       <Pagination
           activePage={currentPage}  

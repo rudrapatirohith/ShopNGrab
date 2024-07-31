@@ -15,14 +15,14 @@ export const getProducts= catchAsyncErrors(async (req,res,next)=>{
     // The search method constructs a case-insensitive filter object that matches the 'name' field of products against a provided keyword, such as 'apple', by converting both to lowercase.
     const apiFilters = new APIFilters(Product,req.query).search().filters(); 
 
-    let products = await apiFilters.query; // returns the filtered list of products that match the keyword.
+    let products = await apiFilters.query.sort({name: 1}); // returns the filtered list of products that match the keyword.
 
     let filterProductsCount =  products.length // finds the number of products we have after filtering
 
     apiFilters.pagination(resPerPage); // worked on pagination to show 4 products per page
  
     //allowing it to be executed multiple times independently, as a single query cannot be executed more than once im using clone to create a copy of mongoose query object
-    products = await apiFilters.query.clone(); 
+    products = await apiFilters.query.clone().sort({ name: 1 }); // Sort again after pagination
 
     res.status(200).json({resPerPage,filterProductsCount,products,})
 

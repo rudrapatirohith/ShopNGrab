@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from './layouts/PageTitle';
 import { useGetProductsQuery } from '../redux/api/productsApi';
 import ProductItem from './product/ProductItem';
@@ -41,6 +41,22 @@ const Home = () => {
   const titleText = keyword ? `${data?.products?.length} Products found with Keyword: ${keyword}` : `Latest Products`;
   const animatedTitle = useAnimatedText(titleText);
 
+  const[currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = ["/images/poster1.jpg",
+    "/images/poster2.jpg"];
+
+    useEffect(() => {
+      // Set up an interval to change the image every 2 seconds
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 5000);
+  
+      // Clear the interval on component unmount
+      return () => clearInterval(interval);
+    }, []);
+
+  
   if (isLoading) return <Loader />;
 
   return (
@@ -53,6 +69,9 @@ const Home = () => {
           </div>
         )}
         <div className={keyword ? "col-6 col-md-9" : "col-12"}>
+        <div className="image-container" style={{ textAlign: 'center', width: '100%', marginBottom: '20px', height:"400px" }}>
+            <img src={images[currentImageIndex]} alt="Banner" style={{borderRadius: '15px', height: "100%", width:"100%" }} />
+          </div>
           <h1 id="products_heading" className="text-secondary animated-text">
             {animatedTitle.split('').map((char, index) => (
               <span key={index} style={{ animationDelay: `${index * 0.03}s` }}>
@@ -60,6 +79,7 @@ const Home = () => {
               </span>
             ))}
           </h1>
+
 
           <section id="products" className="mt-3">
             <div className="row">
