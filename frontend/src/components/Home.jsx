@@ -54,7 +54,7 @@ const Home = () => {
   
       // Clear the interval on component unmount
       return () => clearInterval(interval);
-    }, []);
+    }, [images.length]);
 
   
   if (isLoading) return <Loader />;

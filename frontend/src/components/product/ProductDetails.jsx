@@ -68,7 +68,7 @@ const ProductDetails = () => {
     }
     
     
-        if(error && error?.status==404){
+        if(error && error?.status===404){
             return <NotFound />
         }
 
