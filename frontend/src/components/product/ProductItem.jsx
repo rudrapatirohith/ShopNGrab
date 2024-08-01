@@ -24,7 +24,7 @@ const ProductItem = ({product,columnSize }) => {
                     <div className="ratings mt-auto d-flex">
                       <StarRatings
                         rating={product?.ratings}
-                        starRatedColor="#686868"
+                        starRatedColor="#949494"
                         numberOfStars={5}
                         name='rating'
                         starDimension='22px'

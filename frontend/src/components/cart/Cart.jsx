@@ -72,18 +72,18 @@ const checkOutHandler = ( )=>{
                       </div>
                       <div className="col-4 col-lg-3 mt-4 mt-lg-0">
                         <div className="stockCounter d-inline">
-                          <span className="btn btn-danger minus" onClick={()=>decreaseQty(item,item.quantity)}> - </span>
+                          <span className="btn btn-danger minus mx-2" onClick={()=>decreaseQty(item,item.quantity)}> - </span>
                           <input
                             type="number"
                             className="form-control count d-inline"
                             value={item?.quantity}
                             readOnly
                           />
-                          <span className="btn btn-primary plus" onClick={()=>increaseQty(item,item.quantity)}> + </span>
+                          <span className="btn btn-primary plus mx-2" onClick={()=>increaseQty(item,item.quantity)}> + </span>
                         </div>
                       </div>
-                      <div className="col-4 col-lg-1 mt-4 mt-lg-0">
-                        <i id="delete_cart_item" className="fa fa-trash btn btn-danger" onClick={()=>removeCartItemHandler(item?.product)}></i>
+                      <div className="col-4 col-lg-1 mt-4 mt-lg-0 ">
+                        <i id="delete_cart_item" className="fa fa-trash btn btn-danger my-1" onClick={()=>removeCartItemHandler(item?.product)}></i>
                       </div>
                     </div>
                   </div>
