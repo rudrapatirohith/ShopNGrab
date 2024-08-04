@@ -104,39 +104,41 @@ const Filters = () => {
       <hr />
       <h5 className="mb-3">Category</h5>
 
-{PRODUCT_CATEGORIES?.map((category)=>(
-    <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          name="category"
-          id="check4"
-          value={category}
-          onClick={(e)=>handleClick(e.target)}
-          defaultChecked={defaultCheckHandler("category",category)}
-        />
-        <label className="form-check-label" for="check4"> {category} </label>
-      </div>
-)) }
-      
+      {PRODUCT_CATEGORIES?.map((category, index) => (
+  <div className="form-check" key={index}>
+    <input
+      className="form-check-input"
+      type="checkbox"
+      name="category"
+      id={`check-${index}`}
+      value={category}
+      onClick={(e) => handleClick(e.target)}
+      defaultChecked={defaultCheckHandler("category", category)}
+    />
+    <label className="form-check-label" htmlFor={`check-${index}`}>
+      {category}
+    </label>
+  </div>
+))}
+ 
 
  
 
       <hr />
       <h5 className="mb-3">Ratings</h5>
-    {[5, 4, 3, 2, 1].map((rating)=>(
-        <div className="form-check">
+    {[5, 4, 3, 2, 1].map((rating,val)=>(
+        <div className="form-check" key={`rating-${val}`}>
           <input
             className="form-check-input"
             type="checkbox"
             name="ratings"
-            id="check7"
+            id={`rating-check-${val}`}
             value={rating}
             onClick={(e)=>handleClick(e.target)}
           defaultChecked={defaultCheckHandler("ratings",rating.toString())}
 
           />
-          <label className="form-check-label" for="check7">
+          <label className="form-check-label" htmlFor={`rating-check-${val}`}>
           <StarRatings
                         rating={rating}
                         starRatedColor="#ECB056"

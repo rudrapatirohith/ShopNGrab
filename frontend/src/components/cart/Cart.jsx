@@ -65,7 +65,7 @@ const checkOutHandler = ( )=>{
                         />
                       </div>
                       <div className="col-5 col-lg-3">
-                        <Link to={`/products/${item?.product}`}>{item?.name}</Link>
+                        <Link to={`/product/${item?.product}`}>{item?.name}</Link>
                       </div>
                       <div className="col-4 col-lg-2 mt-4 mt-lg-0">
                         <p id="card_item_price">$ {item?.price}</p>
